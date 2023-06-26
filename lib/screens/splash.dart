@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/loginpage.dart';
-import 'dart:async';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'loginpage.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -13,27 +14,35 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(milliseconds: 5000), () {
+    Future.delayed(const Duration(seconds: 15)).then((value) {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const LoginPage(),
+            builder: (context) => LoginPage(),
           ));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 134, 201, 255),
-        body: Center(
-          child: Image.asset(
-            "images/logo.png",
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        color: const Color.fromARGB(255, 1, 31, 56),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Image.asset(
+            "images/logo2.png",
             width: 220,
             height: 220,
           ),
-        ),
+          SizedBox(
+            height: 50,
+          ),
+          SpinKitWanderingCubes(
+            color: Colors.white,
+            size: 50.0,
+          )
+        ]),
       ),
     );
   }
