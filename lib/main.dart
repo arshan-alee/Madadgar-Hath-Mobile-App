@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/onboarding.dart';
 import 'package:madadgarhath/screens/splash.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Splash(),
+      home: OnBoarding(),
     );
   }
 }
