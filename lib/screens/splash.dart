@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:madadgarhath/screens/onboarding.dart';
 
 import 'loginpage.dart';
 
@@ -18,7 +19,7 @@ class _SplashState extends State<Splash> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginPage(),
+            builder: (context) => OnBoarding(),
           ));
     });
   }

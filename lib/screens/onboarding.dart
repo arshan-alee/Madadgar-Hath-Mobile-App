@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'loginpage.dart';
+
 class OnBoarding extends StatefulWidget {
   const OnBoarding({super.key});
 
@@ -45,36 +47,76 @@ class _OnBoardingState extends State<OnBoarding> {
                         image: onboard_data[index].image,
                         description: onboard_data[index].description)),
               ),
-              Row(
+              Stack(
                 children: [
-                  ...List.generate(
-                      onboard_data.length,
-                      (index) => Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: DotIndicator(
-                              isActive: index == _pageIndex,
+                  // Other widgets in the Stack
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 100,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ...List.generate(
+                              onboard_data.length,
+                              (index) => Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: DotIndicator(
+                                  isActive: index == _pageIndex,
+                                ),
+                              ),
                             ),
-                          )),
-                  Spacer(),
-                  Container(
-                    margin: EdgeInsets.all(8),
-                    height: 60,
-                    width: 60,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _pageController.nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.ease);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          backgroundColor:
-                              const Color.fromARGB(255, 1, 31, 56)),
-                      child: Image.asset("images/logo2.png"),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
+                  Row(
+                    children: [
+                      _pageIndex != onboard_data.length - 1
+                          ? Container(
+                              margin: EdgeInsets.all(8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _pageController.animateToPage(
+                                    onboard_data.length - 1,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.ease,
+                                  );
+                                },
+                                child: Text("SKIP"),
+                              ),
+                            )
+                          : Spacer(),
+                      Spacer(),
+                      Container(
+                        height: 60,
+                        width: 60,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _pageIndex == onboard_data.length - 1
+                                ? Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginPage(),
+                                    ))
+                                : _pageController.nextPage(
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.ease,
+                                  );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            backgroundColor: Color.fromARGB(255, 82, 171, 243),
+                          ),
+                          child: Image.asset("images/arrow.png"),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         )),
@@ -98,7 +140,7 @@ class DotIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         color: isActive
             ? const Color.fromARGB(255, 1, 31, 56)
-            : const Color.fromARGB(255, 1, 31, 56).withOpacity(0.4),
+            : Color.fromARGB(255, 97, 178, 243),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -114,25 +156,25 @@ class Onboard {
 
 final List<Onboard> onboard_data = [
   Onboard(
-      title: "Page 1",
-      image: "images/logo2.png",
+      title: "Welcome to MADADGAR HATH",
+      image: "images/cleaner.png",
       description:
-          'Reprehenderit officia aute commodo ex fugiat nulla quis consequat laboris eiusmod exercitation enim culpa. Sit Lorem cillum Lorem.'),
+          " Find reliable professionals for all your housekeeping needs. From maids to plumbers, we've got you covered"),
   Onboard(
-      title: "Page 2",
-      image: "images/logo2.png",
+      title: "Easy and Convenient",
+      image: "images/taxidriver.png",
       description:
-          'Reprehenderit officia aute commodo ex fugiat nulla quis consequat laboris eiusmod exercitation enim culpa. Sit Lorem cillum Lorem.'),
+          "With MADADGAR HATH, hiring professionals for various day-to-day activities is a breeze. We provide a platform that simplifies the process, saving you time and effort."),
   Onboard(
-      title: "Page 3",
+      title: "Verified Professionals",
       image: "images/logo2.png",
       description:
-          'Reprehenderit officia aute commodo ex fugiat nulla quis consequat laboris eiusmod exercitation enim culpa. Sit Lorem cillum Lorem.'),
+          "Say goodbye to worries about reliability and authenticity. We pre-verify all our service providers, ensuring you get trustworthy professionals for your tasks."),
   Onboard(
-      title: "Page 4",
+      title: "Customized Services",
       image: "images/logo2.png",
       description:
-          'Reprehenderit officia aute commodo ex fugiat nulla quis consequat laboris eiusmod exercitation enim culpa. Sit Lorem cillum Lorem.'),
+          "Tailor your search based on timings, tasks, rates, and even gender preferences. We strive to provide you with the perfect professional to meet your specific needs."),
 ];
 
 class OnboardContent extends StatelessWidget {
@@ -147,11 +189,6 @@ class OnboardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Spacer(),
-      Image.asset(
-        image,
-        height: 250,
-      ),
-      Spacer(), // Image.asset
       Text(
         title,
         textAlign: TextAlign.center,
@@ -160,6 +197,13 @@ class OnboardContent extends StatelessWidget {
             .headlineSmall!
             .copyWith(fontWeight: FontWeight.w500),
       ),
+      Spacer(),
+      Image.asset(
+        image,
+        height: 250,
+      ),
+      Spacer(), // Image.asset
+
       SizedBox(
         height: 10,
       ),
