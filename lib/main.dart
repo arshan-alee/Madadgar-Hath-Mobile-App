@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/getstarted.dart';
 import 'package:madadgarhath/screens/onboarding.dart';
 import 'package:madadgarhath/screens/splash.dart';
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/getstarted.dart';
 
 import 'loginpage.dart';
 
@@ -30,8 +31,7 @@ class _OnBoardingState extends State<OnBoarding> {
       theme: ThemeData(
         textTheme: const TextTheme(
           bodyLarge: TextStyle(
-            fontFamily:
-                'Manrope-Medium', // Replace with the desired font family
+            fontFamily: 'Manrope-Medium',
           ),
           titleMedium: TextStyle(
             fontFamily: 'Manrope-Bold',
@@ -106,11 +106,11 @@ class _OnBoardingState extends State<OnBoarding> {
                                 margin: EdgeInsets.all(8),
                                 child: GestureDetector(
                                   onTap: () {
-                                    _pageController.animateToPage(
-                                      onboard_data.length - 1,
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.ease,
-                                    );
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => GetStarted(),
+                                        ));
                                   },
                                   child: Text(
                                     "SKIP",
@@ -134,7 +134,7 @@ class _OnBoardingState extends State<OnBoarding> {
                                   ? Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => LoginPage(),
+                                        builder: (context) => GetStarted(),
                                       ))
                                   : _pageController.nextPage(
                                       duration: Duration(milliseconds: 300),
@@ -147,7 +147,7 @@ class _OnBoardingState extends State<OnBoarding> {
                                   const Color.fromARGB(255, 1, 31, 56),
                             ),
                             child: Image.asset(
-                              "images/arrowblue.png",
+                              "images/arrowwhite.png",
                               height: double.infinity,
                               width: double.infinity,
                             ),
@@ -188,36 +188,6 @@ class DotIndicator extends StatelessWidget {
   }
 }
 
-class Onboard {
-  final String title, image, description;
-
-  Onboard(
-      {required this.title, required this.image, required this.description});
-}
-
-final List<Onboard> onboard_data = [
-  Onboard(
-      title: "Welcome to \n MADADGAR HATH",
-      image: "images/cleaner.png",
-      description:
-          "Find reliable professionals for all your housekeeping needs. From maids to plumbers, we've got you covered"),
-  Onboard(
-      title: "Easy and Convenient",
-      image: "images/caretaker.png",
-      description:
-          "We provide a platform that simplifies the process, saving you time and effort."),
-  Onboard(
-      title: "Verified Professionals",
-      image: "images/plumber.png",
-      description:
-          "Say goodbye to worries about reliability and authenticity. We pre-verify all our service providers, ensuring you get trustworthy professionals for your tasks."),
-  Onboard(
-      title: "Customized Services",
-      image: "images/gardener.png",
-      description:
-          "Tailor your search based on timings, tasks, rates, and even gender preferences. We strive to provide you with the perfect professional to meet your specific needs."),
-];
-
 class OnboardContent extends StatelessWidget {
   const OnboardContent({
     super.key,
@@ -256,3 +226,33 @@ class OnboardContent extends StatelessWidget {
     ]);
   }
 }
+
+class Onboard {
+  final String title, image, description;
+
+  Onboard(
+      {required this.title, required this.image, required this.description});
+}
+
+final List<Onboard> onboard_data = [
+  Onboard(
+      title: "Welcome to \n MADADGAR HATH",
+      image: "images/cleaner.png",
+      description:
+          "Find reliable professionals for all your housekeeping needs. From maids to plumbers, we've got you covered"),
+  Onboard(
+      title: "Easy and Convenient",
+      image: "images/caretaker.png",
+      description:
+          "We provide a platform that simplifies the process, saving you time and effort."),
+  Onboard(
+      title: "Verified Professionals",
+      image: "images/plumber.png",
+      description:
+          "Say goodbye to worries about reliability and authenticity. We pre-verify all our service providers, ensuring you get trustworthy professionals for your tasks."),
+  Onboard(
+      title: "Customized Services",
+      image: "images/gardener.png",
+      description:
+          "Tailor your search based on timings, tasks, rates, and even gender preferences. We strive to provide you with the perfect professional to meet your specific needs."),
+];
