@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/workerlogin.dart';
+import 'package:madadgarhath/screens/workerregisteration.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({super.key});
@@ -72,7 +74,12 @@ class GetStarted extends StatelessWidget {
                       children: [
                         SizedBox(height: 40),
                         ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => WorkerLoginForm()));
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color.fromARGB(255, 1, 31, 56),

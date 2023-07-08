@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:madadgarhath/screens/onboarding.dart';
 
-import 'loginpage.dart';
+import 'workerlogin.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);

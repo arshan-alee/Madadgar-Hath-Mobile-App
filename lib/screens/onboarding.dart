@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/getstarted.dart';
 
-import 'loginpage.dart';
+import 'workerlogin.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({super.key});
