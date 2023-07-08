@@ -27,99 +27,140 @@ class _OnBoardingState extends State<OnBoarding> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-            child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: PageView.builder(
-                    itemCount: onboard_data.length,
-                    controller: _pageController,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _pageIndex = index;
-                      });
-                    },
-                    itemBuilder: (context, index) => OnboardContent(
-                        title: onboard_data[index].title,
-                        image: onboard_data[index].image,
-                        description: onboard_data[index].description)),
-              ),
-              Stack(
-                children: [
-                  // Other widgets in the Stack
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ...List.generate(
-                              onboard_data.length,
-                              (index) => Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: DotIndicator(
-                                  isActive: index == _pageIndex,
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontFamily:
+                'Manrope-Medium', // Replace with the desired font family
+          ),
+          titleMedium: TextStyle(
+            fontFamily: 'Manrope-Bold',
+          ),
+          titleLarge: TextStyle(
+            fontFamily: 'Manrope-Bold',
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: 'Manrope-Bold',
+          ),
+          headlineSmall: TextStyle(
+            fontFamily: 'Manrope-Bold',
+          ),
+        ),
+      ),
+      home: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage("images/texture2.jpg"),
+          fit: BoxFit.cover,
+        )),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SafeArea(
+              child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                      itemCount: onboard_data.length,
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _pageIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) => OnboardContent(
+                          title: onboard_data[index].title,
+                          image: onboard_data[index].image,
+                          description: onboard_data[index].description)),
+                ),
+                Stack(
+                  children: [
+                    // Other widgets in the Stack
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 100,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ...List.generate(
+                                onboard_data.length,
+                                (index) => Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: DotIndicator(
+                                    isActive: index == _pageIndex,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      _pageIndex != onboard_data.length - 1
-                          ? Container(
-                              margin: EdgeInsets.all(8),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _pageController.animateToPage(
-                                    onboard_data.length - 1,
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.ease,
-                                  );
-                                },
-                                child: Text("SKIP"),
-                              ),
-                            )
-                          : Spacer(),
-                      Spacer(),
-                      Container(
-                        height: 60,
-                        width: 60,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _pageIndex == onboard_data.length - 1
-                                ? Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginPage(),
-                                    ))
-                                : _pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.ease,
-                                  );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            backgroundColor: Color.fromARGB(255, 82, 171, 243),
+                    Row(
+                      children: [
+                        _pageIndex != onboard_data.length - 1
+                            ? Container(
+                                margin: EdgeInsets.all(8),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _pageController.animateToPage(
+                                      onboard_data.length - 1,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.ease,
+                                    );
+                                  },
+                                  child: Text(
+                                    "SKIP",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                            color: const Color.fromARGB(
+                                                255, 1, 31, 56)),
+                                  ),
+                                ),
+                              )
+                            : Spacer(),
+                        Spacer(),
+                        Container(
+                          height: 60,
+                          width: 60,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _pageIndex == onboard_data.length - 1
+                                  ? Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoginPage(),
+                                      ))
+                                  : _pageController.nextPage(
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.ease,
+                                    );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 1, 31, 56),
+                            ),
+                            child: Image.asset(
+                              "images/arrowblue.png",
+                              height: double.infinity,
+                              width: double.infinity,
+                            ),
                           ),
-                          child: Image.asset("images/arrow.png"),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        )),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )),
+        ),
       ),
     );
   }
@@ -140,7 +181,7 @@ class DotIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         color: isActive
             ? const Color.fromARGB(255, 1, 31, 56)
-            : Color.fromARGB(255, 97, 178, 243),
+            : Color.fromARGB(255, 76, 137, 187),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -156,23 +197,23 @@ class Onboard {
 
 final List<Onboard> onboard_data = [
   Onboard(
-      title: "Welcome to MADADGAR HATH",
+      title: "Welcome to \n MADADGAR HATH",
       image: "images/cleaner.png",
       description:
-          " Find reliable professionals for all your housekeeping needs. From maids to plumbers, we've got you covered"),
+          "Find reliable professionals for all your housekeeping needs. From maids to plumbers, we've got you covered"),
   Onboard(
       title: "Easy and Convenient",
-      image: "images/taxidriver.png",
+      image: "images/caretaker.png",
       description:
-          "With MADADGAR HATH, hiring professionals for various day-to-day activities is a breeze. We provide a platform that simplifies the process, saving you time and effort."),
+          "We provide a platform that simplifies the process, saving you time and effort."),
   Onboard(
       title: "Verified Professionals",
-      image: "images/logo2.png",
+      image: "images/plumber.png",
       description:
           "Say goodbye to worries about reliability and authenticity. We pre-verify all our service providers, ensuring you get trustworthy professionals for your tasks."),
   Onboard(
       title: "Customized Services",
-      image: "images/logo2.png",
+      image: "images/gardener.png",
       description:
           "Tailor your search based on timings, tasks, rates, and even gender preferences. We strive to provide you with the perfect professional to meet your specific needs."),
 ];
@@ -189,28 +230,28 @@ class OnboardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Spacer(),
-      Text(
-        title,
-        textAlign: TextAlign.center,
-        style: Theme.of(context)
-            .textTheme
-            .headlineSmall!
-            .copyWith(fontWeight: FontWeight.w500),
-      ),
-      Spacer(),
-      Image.asset(
-        image,
-        height: 250,
-      ),
-      Spacer(), // Image.asset
-
+      Text(title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 26,
+              fontFamily: 'Manrope-ExtraBold',
+              color: const Color.fromARGB(255, 1, 31, 56))),
       SizedBox(
         height: 10,
       ),
-      Text(
-        description,
-        textAlign: TextAlign.center,
+      Image.asset(
+        image,
+        height: 300,
       ),
+      SizedBox(
+        height: 10,
+      ),
+      Text(description,
+          textAlign: TextAlign.center,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(color: Color.fromARGB(255, 3, 67, 119))),
       Spacer()
     ]);
   }
