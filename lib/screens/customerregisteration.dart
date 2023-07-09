@@ -1,44 +1,32 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/customerlogin.dart';
 import 'package:madadgarhath/screens/workerhomepage.dart';
 import 'package:madadgarhath/screens/workerlogin.dart';
 
-class WorkerRegisterForm extends StatefulWidget {
+class CustomerRegisterForm extends StatefulWidget {
   @override
-  _WorkerRegisterFormState createState() => _WorkerRegisterFormState();
+  _CustomerRegisterFormState createState() => _CustomerRegisterFormState();
 }
 
-class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
+class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
   final _formKey = GlobalKey<FormState>();
 
-  String _wfullName = '';
-  String _wemail = '';
-  String _wpassword = '';
-  String _wphoneNumber = '';
-  String _wprofession = '';
-  String _wcnic = '';
-  double _whourlyRate = 0.0;
-
-  List<String> _professionOptions = [
-    'Maid',
-    'Driver',
-    'Plumber',
-    'Electrician',
-    'Mechanic',
-    'Chef',
-    'Daycare',
-    'Attendant',
-    'Tutor',
-    'Gardener',
-    'Sewerage Cleaner',
-  ];
+  String _cfullName = '';
+  String _cemail = '';
+  String _cpassword = '';
+  String _cphoneNumber = '';
+  String _caddress = '';
+  String _ccnic = '';
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform registration logic here
       // You can access the entered values using the _fullName, _email, _password, _phoneNumber, _address, _profilePicture, _profession, _cnic, _username, and _hourlyRate variables
       // Add your registration logic here
+
+      // Simulating registration success
       _showRegistrationSuccessSnackBar();
 
       // Delay navigation to the homepage
@@ -104,7 +92,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Worker Registration',
+                            'Customer Registration',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -123,7 +111,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wfullName = value;
+                              _cfullName = value;
                             },
                           ),
                           TextFormField(
@@ -139,7 +127,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wemail = value;
+                              _cemail = value;
                             },
                           ),
                           TextFormField(
@@ -156,7 +144,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wpassword = value;
+                              _cpassword = value;
                             },
                           ),
                           TextFormField(
@@ -171,7 +159,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wcnic = value;
+                              _ccnic = value;
                             },
                           ),
                           TextFormField(
@@ -188,47 +176,22 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wphoneNumber = value;
-                            },
-                          ),
-                          DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              labelText: 'Profession',
-                              prefixIcon: Icon(Icons.work),
-                            ),
-                            items: _professionOptions.map((String profession) {
-                              return DropdownMenuItem<String>(
-                                value: profession,
-                                child: Text(profession),
-                              );
-                            }).toList(),
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Please select a profession';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              setState(() {
-                                _wprofession = value!;
-                              });
+                              _cphoneNumber = value;
                             },
                           ),
                           TextFormField(
                             decoration: InputDecoration(
-                              labelText: 'Hourly Rate',
-                              prefixIcon: Icon(Icons.attach_money),
+                              labelText: 'Address',
+                              prefixIcon: Icon(Icons.location_on),
                             ),
-                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter an hourly rate';
+                                return 'Please enter your address';
                               }
-                              // Add hourly rate validation logic here if needed
                               return null;
                             },
                             onChanged: (value) {
-                              _whourlyRate = double.parse(value);
+                              _caddress = value;
                             },
                           ),
                           SizedBox(height: 20),
@@ -253,7 +216,8 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => WorkerLoginForm(),
+                                        builder: (context) =>
+                                            CustomerLoginForm(),
                                       ));
                                 },
                                 child: Text('Log In'),

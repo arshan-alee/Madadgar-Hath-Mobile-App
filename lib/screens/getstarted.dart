@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/customerlogin.dart';
 import 'package:madadgarhath/screens/workerlogin.dart';
 import 'package:madadgarhath/screens/workerregisteration.dart';
 
@@ -75,10 +76,11 @@ class GetStarted extends StatelessWidget {
                         SizedBox(height: 40),
                         ElevatedButton(
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => WorkerLoginForm()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WorkerLoginForm()),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
@@ -91,7 +93,13 @@ class GetStarted extends StatelessWidget {
                                     .copyWith(color: Colors.white))),
                         SizedBox(width: 20),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CustomerLoginForm()),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 const Color.fromARGB(255, 1, 31, 56),

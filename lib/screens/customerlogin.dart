@@ -2,21 +2,22 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/WorkerRegisteration.dart';
+import 'package:madadgarhath/screens/customerregisteration.dart';
 
 import '../widgets/CustomSignInButton.dart';
 
-class WorkerLoginForm extends StatefulWidget {
-  const WorkerLoginForm({Key? key}) : super(key: key);
+class CustomerLoginForm extends StatefulWidget {
+  const CustomerLoginForm({Key? key}) : super(key: key);
 
   @override
-  _WorkerLoginFormState createState() => _WorkerLoginFormState();
+  _CustomerLoginFormState createState() => _CustomerLoginFormState();
 }
 
-class _WorkerLoginFormState extends State<WorkerLoginForm> {
+class _CustomerLoginFormState extends State<CustomerLoginForm> {
   final _formKey = GlobalKey<FormState>();
 
-  String _wemail = '';
-  String _wpassword = '';
+  String _cemail = '';
+  String _cpassword = '';
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -83,7 +84,7 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                           return null;
                         },
                         onChanged: (value) {
-                          _wemail = value;
+                          _cemail = value;
                         },
                       ),
                       TextFormField(
@@ -100,7 +101,7 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                           return null;
                         },
                         onChanged: (value) {
-                          _wpassword = value;
+                          _cpassword = value;
                         },
                       ),
                       SizedBox(height: 20),
@@ -148,7 +149,8 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => WorkerRegisterForm()),
+                                    builder: (context) =>
+                                        CustomerRegisterForm()),
                               );
                             },
                             child: Text('Register Now'),
