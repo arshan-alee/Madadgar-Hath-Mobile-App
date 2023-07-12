@@ -1,8 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/workerprofile.dart';
 
 class WorkerHomePage extends StatelessWidget {
-  const WorkerHomePage({super.key});
+  final String workerId;
+
+  const WorkerHomePage({Key? key, required this.workerId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,17 +13,26 @@ class WorkerHomePage extends StatelessWidget {
       home: Scaffold(
         extendBody: true,
         bottomNavigationBar: CurvedNavigationBar(
+          color: const Color.fromARGB(255, 1, 31, 56),
+          height: 65,
           backgroundColor: Colors.transparent,
           items: <Widget>[
-            Icon(Icons.search, size: 30),
-            Icon(Icons.list, size: 30),
-            Icon(Icons.compare_arrows, size: 30),
+            Icon(Icons.search, color: Colors.white, size: 30),
+            Icon(Icons.settings, color: Colors.white, size: 30),
+            Icon(Icons.compare_arrows, color: Colors.white, size: 30),
           ],
           onTap: (index) {
-            //Handle button tap
+            if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WorkerProfileScreen(workerId: workerId),
+                ),
+              );
+            }
           },
         ),
-        body: Container(color: Colors.blueAccent),
+        body: Container(color: Colors.transparent),
       ),
     );
   }

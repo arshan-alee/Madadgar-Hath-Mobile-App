@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/WorkerRegisteration.dart';
+import 'package:madadgarhath/screens/customerhomepage.dart';
 import 'package:madadgarhath/screens/workerhomepage.dart';
 
 import '../widgets/CustomSignInButton.dart';
@@ -24,12 +26,38 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
       // Form is valid, perform sign-in logic here
       // You can access the entered values using the _cemail and _cpassword variables
       // Add your sign-in logic here
-      _showLoginSuccessSnackBar();
-      Future.delayed(Duration(seconds: 5), () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WorkerHomePage()),
-        );
+      final firestore = FirebaseFirestore.instance;
+
+      // Query the worker collection based on email and password
+      firestore
+          .collection('worker')
+          .where('email', isEqualTo: _wemail)
+          .where('password', isEqualTo: _wpassword)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          // Login successful, retrieve the worker ID
+          final workerId = querySnapshot.docs.first.id;
+
+          // Show login success message
+          _showLoginSuccessSnackBar();
+
+          // Delay navigation to the WorkerHomePage
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkerHomePage(workerId: workerId),
+              ),
+            );
+          });
+        } else {
+          // No matching worker found, show error message
+          _showLoginErrorSnackBar();
+        }
+      }).catchError((error) {
+        // Show error message
+        _showLoginErrorSnackBar();
       });
     }
   }
@@ -43,6 +71,19 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
         ),
         duration: Duration(seconds: 5),
         backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  void _showLoginErrorSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Invalid email or password',
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
       ),
     );
   }
@@ -139,44 +180,44 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                           ),
                           child: Text('Log In'),
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Or connect using',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomButton(
-                              icon: 'images/google.png',
-                              text: "Log In with Google",
-                              bgcolor: Color(0xFFCE1010),
-                              txtcolor: Colors.white,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => WorkerHomePage()),
-                                );
-                              },
-                            ),
-                            SizedBox(width: 20),
-                            CustomButton(
-                              icon: 'images/facebook.png',
-                              text: "Log In with Facebook",
-                              bgcolor: Colors.blue,
-                              txtcolor: Colors.white,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => WorkerHomePage()),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                        // SizedBox(height: 10),
+                        // Text(
+                        //   'Or connect using',
+                        //   style: TextStyle(fontSize: 16, color: Colors.grey),
+                        // ),
+                        // SizedBox(height: 10),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     CustomButton(
+                        //       icon: 'images/google.png',
+                        //       text: "Log In with Google",
+                        //       bgcolor: Color(0xFFCE1010),
+                        //       txtcolor: Colors.white,
+                        //       onPressed: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => WorkerHomePage()),
+                        //         );
+                        //       },
+                        //     ),
+                        //     SizedBox(width: 20),
+                        //     CustomButton(
+                        //       icon: 'images/facebook.png',
+                        //       text: "Log In with Facebook",
+                        //       bgcolor: Colors.blue,
+                        //       txtcolor: Colors.white,
+                        //       onPressed: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => WorkerHomePage()),
+                        //         );
+                        //       },
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

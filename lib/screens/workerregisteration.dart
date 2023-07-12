@@ -3,8 +3,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/workerhomepage.dart';
 import 'package:madadgarhath/screens/workerlogin.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WorkerRegisterForm extends StatefulWidget {
+  const WorkerRegisterForm({Key? key}) : super(key: key);
+
   @override
   _WorkerRegisterFormState createState() => _WorkerRegisterFormState();
 }
@@ -17,10 +21,10 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
   String _wpassword = '';
   String _wphoneNumber = '';
   String _wprofession = '';
-  String _wcnic = '';
+  int _wcnic = 0;
   double _whourlyRate = 0.0;
 
-  List<String> _professionOptions = [
+  final List<String> _professionOptions = [
     'Maid',
     'Driver',
     'Plumber',
@@ -34,20 +38,46 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
     'Sewerage Cleaner',
   ];
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform registration logic here
-      // You can access the entered values using the _fullName, _email, _password, _phoneNumber, _address, _profilePicture, _profession, _cnic, _username, and _hourlyRate variables
-      // Add your registration logic here
-      _showRegistrationSuccessSnackBar();
 
-      // Delay navigation to the homepage
-      Future.delayed(Duration(seconds: 5), () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WorkerHomePage()),
-        );
-      });
+      // Access the Firestore instance
+      final firestore = FirebaseFirestore.instance;
+
+      try {
+        // Create a document reference for the worker registration data
+        final docRef = await firestore.collection('worker').add({
+          'fullName': _wfullName,
+          'email': _wemail,
+          'password': _wpassword,
+          'phoneNumber': _wphoneNumber,
+          'profession': _wprofession,
+          'cnic': _wcnic,
+          'hourlyRate': _whourlyRate,
+        });
+
+        // Retrieve the newly created document ID
+        final documentId = docRef.id;
+
+        // Display a success message
+        _showRegistrationSuccessSnackBar();
+
+        // Delay navigation to the homepage
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkerHomePage(workerId: documentId),
+            ),
+          );
+        });
+      } catch (e) {
+        // Handle any errors that occur during data saving
+        print('Error saving data: $e');
+        // Display an error message
+        _showErrorSnackBar();
+      }
     }
   }
 
@@ -62,6 +92,27 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
         backgroundColor: Colors.green,
       ),
     );
+  }
+
+  void _showErrorSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Error occurred during registration',
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  Future<Map<String, dynamic>> _fetchWorkerData(String workerId) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('worker')
+        .doc(workerId)
+        .get();
+    return snapshot.data() as Map<String, dynamic>;
   }
 
   @override
@@ -85,12 +136,13 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
       body: Stack(
         children: [
           Container(
-              decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/texture2.jpg"),
-              fit: BoxFit.cover,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/texture2.jpg"),
+                fit: BoxFit.cover,
+              ),
             ),
-          )),
+          ),
           SafeArea(
             child: SingleChildScrollView(
               child: Center(
@@ -164,6 +216,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               labelText: 'CNIC',
                               prefixIcon: Icon(Icons.credit_card),
                             ),
+                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter your CNIC';
@@ -171,7 +224,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wcnic = value;
+                              _wcnic = int.parse(value);
                             },
                           ),
                           TextFormField(
@@ -251,10 +304,11 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               TextButton(
                                 onPressed: () {
                                   Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => WorkerLoginForm(),
-                                      ));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WorkerLoginForm(),
+                                    ),
+                                  );
                                 },
                                 child: Text('Log In'),
                               ),

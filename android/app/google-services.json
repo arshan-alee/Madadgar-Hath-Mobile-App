@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "290885471243",
+    "project_id": "madadgar-hath-app",
+    "storage_bucket": "madadgar-hath-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290885471243:android:340b54405c02105fd3cb0e",
+        "android_client_info": {
+          "package_name": "com.arshan.madadgarhath"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290885471243-f2u3umk081mgogsis98bn07enhfr77ph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuthcxFN2iC1YUhmcqvR9OqzG4viG3h0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290885471243-f2u3umk081mgogsis98bn07enhfr77ph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

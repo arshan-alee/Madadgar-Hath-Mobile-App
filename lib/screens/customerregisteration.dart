@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/customerhomepage.dart';
 import 'package:madadgarhath/screens/customerlogin.dart';
 import 'package:madadgarhath/screens/workerhomepage.dart';
 import 'package:madadgarhath/screens/workerlogin.dart';
@@ -33,7 +34,7 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
       Future.delayed(Duration(seconds: 5), () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => WorkerHomePage()),
+          MaterialPageRoute(builder: (context) => CustomerHomePage()),
         );
       });
     }
@@ -80,8 +81,8 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
             ),
           )),
           SafeArea(
-            child: SingleChildScrollView(
-              child: Center(
+            child: Center(
+              child: SingleChildScrollView(
                 child: Card(
                   margin: EdgeInsets.all(20),
                   child: Padding(
