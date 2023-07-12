@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   flutter_spinkit: ^5.2.0
   image_picker:
+  curved_navigation_bar:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/WorkerRegisteration.dart';
+import 'package:madadgarhath/screens/customerhomepage.dart';
 import 'package:madadgarhath/screens/customerregisteration.dart';
 
 import '../widgets/CustomSignInButton.dart';
@@ -22,38 +23,61 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform sign-in logic here
-      // You can access the entered values using the _email and _password variables
+      // You can access the entered values using the _cemail and _cpassword variables
       // Add your sign-in logic here
+      _showLoginSuccessSnackBar();
+      // Navigate to the customer homepage
+      Future.delayed(Duration(seconds: 5), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CustomerHomePage()),
+        );
+      });
     }
+  }
+
+  void _showLoginSuccessSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Login successful',
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/texture2.jpg"),
-            fit: BoxFit.cover,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
+        elevation: 0, // Remove the app bar shadow
+      ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/texture2.jpg"),
+                fit: BoxFit.cover,
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
-            elevation: 0, // Remove the app bar shadow
           ),
-          body: Center(
+          Center(
             child: Card(
               margin: EdgeInsets.all(20),
               child: Padding(
@@ -121,7 +145,7 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                       SizedBox(height: 10),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CustomButton(
@@ -129,6 +153,13 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
                             text: "Log In with Google",
                             bgcolor: Color(0xFFCE1010),
                             txtcolor: Colors.white,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CustomerHomePage()),
+                              );
+                            },
                           ),
                           SizedBox(width: 20),
                           CustomButton(
@@ -136,6 +167,13 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
                             text: "Log In with Facebook",
                             bgcolor: Colors.blue,
                             txtcolor: Colors.white,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CustomerHomePage()),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -163,7 +201,7 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

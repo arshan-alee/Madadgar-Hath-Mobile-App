@@ -57,107 +57,114 @@ class _OnBoardingState extends State<OnBoarding> {
           backgroundColor: Colors.transparent,
           body: SafeArea(
               child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: PageView.builder(
-                      itemCount: onboard_data.length,
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _pageIndex = index;
-                        });
-                      },
-                      itemBuilder: (context, index) => OnboardContent(
-                          title: onboard_data[index].title,
-                          image: onboard_data[index].image,
-                          description: onboard_data[index].description)),
-                ),
-                Stack(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
                   children: [
-                    // Other widgets in the Stack
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: 100,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ...List.generate(
-                                onboard_data.length,
-                                (index) => Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: DotIndicator(
-                                    isActive: index == _pageIndex,
+                    Expanded(
+                      child: PageView.builder(
+                          itemCount: onboard_data.length,
+                          controller: _pageController,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _pageIndex = index;
+                            });
+                          },
+                          itemBuilder: (context, index) => OnboardContent(
+                              title: onboard_data[index].title,
+                              image: onboard_data[index].image,
+                              description: onboard_data[index].description)),
+                    ),
+                    Stack(
+                      children: [
+                        // Other widgets in the Stack
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: 100,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ...List.generate(
+                                    onboard_data.length,
+                                    (index) => Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: DotIndicator(
+                                        isActive: index == _pageIndex,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        _pageIndex != onboard_data.length - 1
-                            ? Container(
-                                margin: EdgeInsets.all(8),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => GetStarted(),
-                                        ));
-                                  },
-                                  child: Text(
-                                    "SKIP",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                            color: const Color.fromARGB(
-                                                255, 1, 31, 56)),
-                                  ),
+                        Row(
+                          children: [
+                            _pageIndex != onboard_data.length - 1
+                                ? Container(
+                                    margin: EdgeInsets.all(8),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  GetStarted(),
+                                            ));
+                                      },
+                                      child: Text(
+                                        "SKIP",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge!
+                                            .copyWith(
+                                                color: const Color.fromARGB(
+                                                    255, 1, 31, 56)),
+                                      ),
+                                    ),
+                                  )
+                                : Spacer(),
+                            Spacer(),
+                            Container(
+                              height: 60,
+                              width: 60,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _pageIndex == onboard_data.length - 1
+                                      ? Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => GetStarted(),
+                                          ))
+                                      : _pageController.nextPage(
+                                          duration: Duration(milliseconds: 300),
+                                          curve: Curves.ease,
+                                        );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: CircleBorder(),
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 1, 31, 56),
                                 ),
-                              )
-                            : Spacer(),
-                        Spacer(),
-                        Container(
-                          height: 60,
-                          width: 60,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              _pageIndex == onboard_data.length - 1
-                                  ? Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => GetStarted(),
-                                      ))
-                                  : _pageController.nextPage(
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.ease,
-                                    );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: CircleBorder(),
-                              backgroundColor:
-                                  const Color.fromARGB(255, 1, 31, 56),
+                                child: Image.asset(
+                                  "images/arrowwhite.png",
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                ),
+                              ),
                             ),
-                            child: Image.asset(
-                              "images/arrowwhite.png",
-                              height: double.infinity,
-                              width: double.infinity,
-                            ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           )),
         ),

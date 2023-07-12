@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class WorkerHomePage extends StatelessWidget {
@@ -5,11 +6,22 @@ class WorkerHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-          body: Center(
-        child: Text("Hello"),
-      )),
+        extendBody: true,
+        bottomNavigationBar: CurvedNavigationBar(
+          backgroundColor: Colors.transparent,
+          items: <Widget>[
+            Icon(Icons.search, size: 30),
+            Icon(Icons.list, size: 30),
+            Icon(Icons.compare_arrows, size: 30),
+          ],
+          onTap: (index) {
+            //Handle button tap
+          },
+        ),
+        body: Container(color: Colors.blueAccent),
+      ),
     );
   }
 }

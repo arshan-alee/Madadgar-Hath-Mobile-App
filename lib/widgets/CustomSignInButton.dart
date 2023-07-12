@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/homepage.dart';
 import 'package:madadgarhath/screens/workerhomepage.dart';
 
 class CustomButton extends StatelessWidget {
@@ -9,12 +8,14 @@ class CustomButton extends StatelessWidget {
     required this.text,
     required this.bgcolor,
     required this.txtcolor,
+    required this.onPressed, // New prop for the onPressed function
   }) : super(key: key);
 
   final String icon;
   final String text;
   final Color bgcolor;
   final Color txtcolor;
+  final VoidCallback onPressed; // Updated prop for the onPressed function
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +23,7 @@ class CustomButton extends StatelessWidget {
       width: 140,
       height: 40,
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WorkerHomePage()),
-          );
-        },
+        onPressed: onPressed, // Use the onPressed prop directly
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
