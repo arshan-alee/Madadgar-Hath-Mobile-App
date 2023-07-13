@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/workerprofile.dart';
 
 class WorkerHomePage extends StatelessWidget {
-  final String workerId;
+  final String userId;
 
-  const WorkerHomePage({Key? key, required this.workerId}) : super(key: key);
+  const WorkerHomePage({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class WorkerHomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => WorkerProfileScreen(workerId: workerId),
+                  builder: (context) => WorkerProfileScreen(userId: userId),
                 ),
               );
             }

@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/WorkerRegisteration.dart';
 import 'package:madadgarhath/screens/customerhomepage.dart';
+import 'package:madadgarhath/screens/getstarted.dart';
 import 'package:madadgarhath/screens/workerhomepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/CustomSignInButton.dart';
 
@@ -21,44 +22,31 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
   String _wemail = '';
   String _wpassword = '';
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform sign-in logic here
-      // You can access the entered values using the _cemail and _cpassword variables
+      // You can access the entered values using the _wemail and _wpassword variables
       // Add your sign-in logic here
-      final firestore = FirebaseFirestore.instance;
-
-      // Query the worker collection based on email and password
-      firestore
-          .collection('worker')
-          .where('email', isEqualTo: _wemail)
-          .where('password', isEqualTo: _wpassword)
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        if (querySnapshot.docs.isNotEmpty) {
-          // Login successful, retrieve the worker ID
-          final workerId = querySnapshot.docs.first.id;
-
-          // Show login success message
-          _showLoginSuccessSnackBar();
-
-          // Delay navigation to the WorkerHomePage
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WorkerHomePage(workerId: workerId),
-              ),
-            );
-          });
-        } else {
-          // No matching worker found, show error message
-          _showLoginErrorSnackBar();
-        }
-      }).catchError((error) {
-        // Show error message
-        _showLoginErrorSnackBar();
-      });
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _wemail,
+          password: _wpassword,
+        );
+        final userId = userCredential.user!.uid;
+        // Login successful
+        _showLoginSuccessSnackBar();
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WorkerHomePage(userId: userId)),
+          );
+        });
+      } catch (e) {
+        // Login failed
+        _showLoginFailureSnackBar();
+      }
     }
   }
 
@@ -75,14 +63,14 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
     );
   }
 
-  void _showLoginErrorSnackBar() {
+  void _showLoginFailureSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           'Invalid email or password',
           textAlign: TextAlign.center,
         ),
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 5),
         backgroundColor: Colors.red,
       ),
     );
@@ -101,7 +89,10 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => GetStarted()),
+            );
           },
         ),
         elevation: 0, // Remove the app bar shadow

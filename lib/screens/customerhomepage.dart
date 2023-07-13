@@ -3,7 +3,10 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHomePage extends StatefulWidget {
-  const CustomerHomePage({super.key});
+  final String customerId;
+
+  const CustomerHomePage({Key? key, required this.customerId})
+      : super(key: key);
 
   @override
   State<CustomerHomePage> createState() => _CustomerHomePageState();
@@ -11,6 +14,7 @@ class CustomerHomePage extends StatefulWidget {
 
 class _CustomerHomePageState extends State<CustomerHomePage> {
   Stream<QuerySnapshot<Map<String, dynamic>>>? workerStream;
+
   @override
   void initState() {
     super.initState();
@@ -33,63 +37,65 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             Icon(Icons.compare_arrows, color: Colors.white, size: 30),
           ],
           onTap: (index) {
-            //Handle button tap
+            // Handle button tap
           },
         ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Search',
-                  prefixIcon: Icon(Icons.search),
-                ),
-                onChanged: (value) {
-                  // Handle search query
-                },
-              ),
-              SizedBox(height: 20),
-              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: workerStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final workerDocs = snapshot.data!.docs;
-                    return ListView.builder(
-                      itemCount: workerDocs.length,
-                      itemBuilder: (context, index) {
-                        final workerData = workerDocs[index].data();
-                        final workerName = workerData['fullName'] as String;
-                        final workerPhoneNumber =
-                            workerData['phoneNumber'] as String;
-                        final workerHourlyRate =
-                            workerData['hourlyRate'] as double;
-                        final workerProfession =
-                            workerData['profession'] as String;
-                        return Card(
-                          child: ListTile(
-                            title: Text(workerName),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Profession: $workerProfession'),
-                                Text('Phone: $workerPhoneNumber'),
-                                Text(
-                                    'Hourly Rate: \$${workerHourlyRate.toStringAsFixed(2)}'),
-                              ],
-                            ),
-                          ),
-                        );
+        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: workerStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final workerDocs = snapshot.data!.docs;
+              return SafeArea(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Search',
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                      onChanged: (value) {
+                        // Handle search query
                       },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              ),
-            ],
-          ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: workerDocs.length,
+                        itemBuilder: (context, index) {
+                          final workerData = workerDocs[index].data();
+                          final workerName = workerData['fullName'] as String;
+                          final workerPhoneNumber =
+                              workerData['phoneNumber'] as String;
+                          final workerHourlyRate =
+                              workerData['hourlyRate'] as double;
+                          final workerProfession =
+                              workerData['profession'] as String;
+                          return Card(
+                            child: ListTile(
+                              title: Text(workerName),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Profession: $workerProfession'),
+                                  Text('Phone: $workerPhoneNumber'),
+                                  Text(
+                                      'Hourly Rate: \$${workerHourlyRate.toStringAsFixed(2)}'),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
         ),
       ),
     );

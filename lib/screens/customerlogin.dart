@@ -6,6 +6,7 @@ import 'package:madadgarhath/screens/customerhomepage.dart';
 import 'package:madadgarhath/screens/customerregisteration.dart';
 
 import '../widgets/CustomSignInButton.dart';
+import 'getstarted.dart';
 
 class CustomerLoginForm extends StatefulWidget {
   const CustomerLoginForm({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
       Future.delayed(Duration(seconds: 5), () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CustomerHomePage()),
+          MaterialPageRoute(builder: (context) => GetStarted()),
         );
       });
     }
@@ -139,44 +140,44 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
                         ),
                         child: Text('Log In'),
                       ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Or connect using',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomButton(
-                            icon: 'images/google.png',
-                            text: "Log In with Google",
-                            bgcolor: Color(0xFFCE1010),
-                            txtcolor: Colors.white,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CustomerHomePage()),
-                              );
-                            },
-                          ),
-                          SizedBox(width: 20),
-                          CustomButton(
-                            icon: 'images/facebook.png',
-                            text: "Log In with Facebook",
-                            bgcolor: Colors.blue,
-                            txtcolor: Colors.white,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CustomerHomePage()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                      // SizedBox(height: 10),
+                      // Text(
+                      //   'Or connect using',
+                      //   style: TextStyle(fontSize: 16, color: Colors.grey),
+                      // ),
+                      // SizedBox(height: 10),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     CustomButton(
+                      //       icon: 'images/google.png',
+                      //       text: "Log In with Google",
+                      //       bgcolor: Color(0xFFCE1010),
+                      //       txtcolor: Colors.white,
+                      //       onPressed: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => GetStarted()),
+                      //         );
+                      //       },
+                      //     ),
+                      //     SizedBox(width: 20),
+                      //     CustomButton(
+                      //       icon: 'images/facebook.png',
+                      //       text: "Log In with Facebook",
+                      //       bgcolor: Colors.blue,
+                      //       txtcolor: Colors.white,
+                      //       onPressed: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => GetStarted()),
+                      //         );
+                      //       },
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

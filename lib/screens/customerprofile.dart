@@ -2,40 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/workerhomepage.dart';
-import 'package:madadgarhath/screens/workerlogin.dart';
+import 'package:madadgarhath/screens/customerhomepage.dart';
+import 'package:madadgarhath/screens/customerlogin.dart';
 
-class WorkerProfileScreen extends StatefulWidget {
+class CustomerProfileScreen extends StatefulWidget {
   final String userId;
 
-  const WorkerProfileScreen({Key? key, required this.userId}) : super(key: key);
+  const CustomerProfileScreen({Key? key, required this.userId})
+      : super(key: key);
 
   @override
-  _WorkerProfileScreenState createState() => _WorkerProfileScreenState();
+  _CustomerProfileScreenState createState() => _CustomerProfileScreenState();
 }
 
-class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
+class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String _fullName = '';
   String _email = '';
   String _phoneNumber = '';
-  String _profession = '';
-  bool _isAvailable = false;
-
-  final List<String> _professionOptions = [
-    'Maid',
-    'Driver',
-    'Plumber',
-    'Electrician',
-    'Mechanic',
-    'Chef',
-    'Daycare',
-    'Attendant',
-    'Tutor',
-    'Gardener',
-    'Sewerage Cleaner',
-  ];
+  String _address = '';
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +42,8 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => WorkerHomePage(userId: widget.userId),
+                builder: (context) =>
+                    CustomerHomePage(customerId: widget.userId),
               ),
             );
           }
@@ -64,26 +51,25 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('worker')
+            .collection('customer')
             .where('userId', isEqualTo: widget.userId)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final workerData =
+            final customerData =
                 snapshot.data!.docs[0].data() as Map<String, dynamic>;
 
-            // Retrieve worker details from Firestore
-            final fullName = workerData['fullName'] as String;
-            final email = workerData['email'] as String;
-            final phoneNumber = workerData['phoneNumber'] as String;
-            final profession = workerData['profession'] as String;
-            _isAvailable = workerData['isAvailable'] as bool? ?? false;
+            // Retrieve customer details from Firestore
+            final fullName = customerData['fullName'] as String;
+            final email = customerData['email'] as String;
+            final phoneNumber = customerData['phoneNumber'] as String;
+            final address = customerData['address'] as String;
 
             // Update the local variables with retrieved values
             _fullName = fullName;
             _email = email;
             _phoneNumber = phoneNumber;
-            _profession = profession;
+            _address = address;
 
             return SafeArea(
               child: Center(
@@ -155,62 +141,32 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            'Profession',
+                            'Address',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          DropdownButtonFormField<String>(
-                            value: _profession,
-                            items: _professionOptions.map((String profession) {
-                              return DropdownMenuItem<String>(
-                                value: profession,
-                                child: Text(profession),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _profession = value!;
-                              });
+                          TextFormField(
+                            initialValue: _address,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your address';
+                              }
+                              return null;
                             },
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Availability',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          StatefulBuilder(
-                            builder: (context, setState) {
-                              return Row(
-                                children: [
-                                  Checkbox(
-                                    value: _isAvailable,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _isAvailable = value!;
-                                      });
-                                    },
-                                  ),
-                                  Text('Available'),
-                                ],
-                              );
+                            onChanged: (value) {
+                              _address = value;
                             },
                           ),
                           SizedBox(height: 20),
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                onPressed: _submitForm,
-                                child: Text('Update Profile'),
-                              ),
-                              Spacer(),
-                              ElevatedButton(
-                                onPressed: _signOut,
-                                child: Text('Sign Out'),
-                              ),
-                            ],
+                          ElevatedButton(
+                            onPressed: _submitForm,
+                            child: Text('Update Profile'),
+                          ),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: _signOut,
+                            child: Text('Sign Out'),
                           ),
                         ],
                       ),
@@ -232,17 +188,16 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform update logic here
-      // You can access the entered values using the _phoneNumber and _profession variables
+      // You can access the entered values using the _phoneNumber and _address variables
       // Add your update logic here
 
-      // Update the worker document in Firestore
+      // Update the customer document in Firestore
       FirebaseFirestore.instance
-          .collection('worker')
+          .collection('customer')
           .doc(widget.userId)
           .update({
         'phoneNumber': _phoneNumber,
-        'profession': _profession,
-        'isAvailable': _isAvailable,
+        'address': _address,
       }).then((_) {
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -267,7 +222,7 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => WorkerLoginForm(),
+          builder: (context) => CustomerLoginForm(),
         ),
       );
     } catch (e) {

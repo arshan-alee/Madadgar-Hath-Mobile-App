@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/customerhomepage.dart';
+import 'package:madadgarhath/screens/customerprofile.dart';
+import 'package:madadgarhath/screens/customerregisteration.dart';
 import 'package:madadgarhath/screens/getstarted.dart';
 import 'package:madadgarhath/screens/onboarding.dart';
 import 'package:madadgarhath/screens/splash.dart';
@@ -21,9 +23,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: WorkerProfileScreen(
-        workerId: 'AoN7awzD9EGDEEyZCuRa',
-      ),
-    );
+        home: CustomerProfileScreen(
+      userId: 'Ck0bzzbwK3dKf6CYkev5uzGwJYw2',
+    ));
   }
 }

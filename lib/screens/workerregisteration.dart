@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/workerhomepage.dart';
 import 'package:madadgarhath/screens/workerlogin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -23,6 +24,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
   String _wprofession = '';
   int _wcnic = 0;
   double _whourlyRate = 0.0;
+  bool _isAvailable = false;
 
   final List<String> _professionOptions = [
     'Maid',
@@ -42,12 +44,23 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform registration logic here
 
-      // Access the Firestore instance
+      // Access the Firebase Authentication instance
+      final auth = FirebaseAuth.instance;
       final firestore = FirebaseFirestore.instance;
 
       try {
+        // Create the user with email and password
+        final userCredential = await auth.createUserWithEmailAndPassword(
+          email: _wemail,
+          password: _wpassword,
+        );
+
+        // Retrieve the user ID
+        final userId = userCredential.user!.uid;
+
         // Create a document reference for the worker registration data
         final docRef = await firestore.collection('worker').add({
+          'userId': userId,
           'fullName': _wfullName,
           'email': _wemail,
           'password': _wpassword,
@@ -55,6 +68,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
           'profession': _wprofession,
           'cnic': _wcnic,
           'hourlyRate': _whourlyRate,
+          'availability': _isAvailable
         });
 
         // Retrieve the newly created document ID
@@ -68,7 +82,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WorkerHomePage(workerId: documentId),
+              builder: (context) => WorkerHomePage(userId: userId),
             ),
           );
         });

@@ -1,12 +1,12 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:madadgarhath/screens/customerhomepage.dart';
 import 'package:madadgarhath/screens/customerlogin.dart';
-import 'package:madadgarhath/screens/workerhomepage.dart';
-import 'package:madadgarhath/screens/workerlogin.dart';
 
 class CustomerRegisterForm extends StatefulWidget {
+  const CustomerRegisterForm({Key? key}) : super(key: key);
+
   @override
   _CustomerRegisterFormState createState() => _CustomerRegisterFormState();
 }
@@ -19,24 +19,58 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
   String _cpassword = '';
   String _cphoneNumber = '';
   String _caddress = '';
-  String _ccnic = '';
+  int _ccnic = 0;
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform registration logic here
-      // You can access the entered values using the _fullName, _email, _password, _phoneNumber, _address, _profilePicture, _profession, _cnic, _username, and _hourlyRate variables
-      // Add your registration logic here
 
-      // Simulating registration success
-      _showRegistrationSuccessSnackBar();
+      // Access the Firebase Authentication instance
+      final auth = FirebaseAuth.instance;
+      final firestore = FirebaseFirestore.instance;
 
-      // Delay navigation to the homepage
-      Future.delayed(Duration(seconds: 5), () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CustomerHomePage()),
+      try {
+        // Create the user with email and password
+        final userCredential = await auth.createUserWithEmailAndPassword(
+          email: _cemail,
+          password: _cpassword,
         );
-      });
+
+        // Retrieve the user ID
+        final userId = userCredential.user!.uid;
+
+        // Create a document reference for the customer registration data
+        final docRef = await firestore.collection('customer').add({
+          'userId': userId,
+          'fullName': _cfullName,
+          'email': _cemail,
+          'password': _cpassword,
+          'phoneNumber': _cphoneNumber,
+          'address': _caddress,
+          'cnic': _ccnic,
+        });
+
+        // Retrieve the newly created document ID
+        final documentId = docRef.id;
+
+        // Display a success message
+        _showRegistrationSuccessSnackBar();
+
+        // Delay navigation to the homepage
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CustomerHomePage(customerId: userId),
+            ),
+          );
+        });
+      } catch (e) {
+        // Handle any errors that occur during data saving
+        print('Error saving data: $e');
+        // Display an error message
+        _showErrorSnackBar();
+      }
     }
   }
 
@@ -49,6 +83,19 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
         ),
         duration: Duration(seconds: 5),
         backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  void _showErrorSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Error occurred during registration',
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.red,
       ),
     );
   }
@@ -74,15 +121,16 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
       body: Stack(
         children: [
           Container(
-              decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/texture2.jpg"),
-              fit: BoxFit.cover,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/texture2.jpg"),
+                fit: BoxFit.cover,
+              ),
             ),
-          )),
+          ),
           SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
+            child: SingleChildScrollView(
+              child: Center(
                 child: Card(
                   margin: EdgeInsets.all(20),
                   child: Padding(
@@ -153,6 +201,7 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
                               labelText: 'CNIC',
                               prefixIcon: Icon(Icons.credit_card),
                             ),
+                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter your CNIC';
@@ -160,7 +209,7 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _ccnic = value;
+                              _ccnic = int.parse(value);
                             },
                           ),
                           TextFormField(
@@ -215,11 +264,11 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
                               TextButton(
                                 onPressed: () {
                                   Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CustomerLoginForm(),
-                                      ));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustomerLoginForm(),
+                                    ),
+                                  );
                                 },
                                 child: Text('Log In'),
                               ),
