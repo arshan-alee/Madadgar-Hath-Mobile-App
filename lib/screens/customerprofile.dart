@@ -42,8 +42,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    CustomerHomePage(customerId: widget.userId),
+                builder: (context) => CustomerHomePage(userId: widget.userId),
               ),
             );
           }

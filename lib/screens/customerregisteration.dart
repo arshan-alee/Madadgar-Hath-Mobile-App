@@ -61,7 +61,7 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => CustomerHomePage(customerId: userId),
+              builder: (context) => CustomerHomePage(userId: userId),
             ),
           );
         });

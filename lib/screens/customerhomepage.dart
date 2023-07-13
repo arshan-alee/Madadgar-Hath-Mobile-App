@@ -3,10 +3,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class CustomerHomePage extends StatefulWidget {
-  final String customerId;
+  final String userId;
 
-  const CustomerHomePage({Key? key, required this.customerId})
-      : super(key: key);
+  const CustomerHomePage({Key? key, required this.userId}) : super(key: key);
 
   @override
   State<CustomerHomePage> createState() => _CustomerHomePageState();
