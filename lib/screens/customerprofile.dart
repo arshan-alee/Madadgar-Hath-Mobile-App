@@ -22,6 +22,23 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   String _email = '';
   String _phoneNumber = '';
   String _address = '';
+  bool _jobAvailability = false;
+  String _needProfession = '';
+
+  final List<String> _professionOptions = [
+    '',
+    'Maid',
+    'Driver',
+    'Plumber',
+    'Electrician',
+    'Mechanic',
+    'Chef',
+    'Daycare',
+    'Attendant',
+    'Tutor',
+    'Gardener',
+    'Sewerage Cleaner',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +52,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         items: <Widget>[
           Icon(Icons.search, color: Colors.white, size: 30),
           Icon(Icons.settings, color: Colors.white, size: 30),
-          Icon(Icons.compare_arrows, color: Colors.white, size: 30),
         ],
         onTap: (index) {
           if (index == 0) {
@@ -59,118 +75,177 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 snapshot.data!.docs[0].data() as Map<String, dynamic>;
 
             // Retrieve customer details from Firestore
-            final fullName = customerData['fullName'] as String;
-            final email = customerData['email'] as String;
-            final phoneNumber = customerData['phoneNumber'] as String;
-            final address = customerData['address'] as String;
-
-            // Update the local variables with retrieved values
-            _fullName = fullName;
-            _email = email;
-            _phoneNumber = phoneNumber;
-            _address = address;
+            _fullName = customerData['fullName'] as String;
+            _email = customerData['email'] as String;
+            _phoneNumber = customerData['phoneNumber'] as String;
+            _address = customerData['address'] as String;
+            _jobAvailability =
+                customerData['jobAvailability'] as bool? ?? false;
+            _needProfession = customerData['needProfession'] as String? ?? '';
 
             return SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: CircleAvatar(
-                              radius: 50.0,
-                              // You can use an image here by specifying the 'backgroundImage' property
-                              // backgroundImage: AssetImage('path_to_image'),
-                              child: Icon(
-                                Icons.person,
-                                size: 50.0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: ElevatedButton(
+                        onPressed: _signOut,
+                        child: Text('Sign Out'),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                          child: SingleChildScrollView(
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: CircleAvatar(
+                                      radius: 50.0,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 50.0,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Full Name',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    initialValue: _fullName,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                    enabled: false,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Email',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    initialValue: _email,
+                                    enabled: false,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Phone Number',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    initialValue: _phoneNumber,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please enter your phone number';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      _phoneNumber = value;
+                                    },
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Address',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    initialValue: _address,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please enter your address';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      _address = value;
+                                    },
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'JobAvailability',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  StatefulBuilder(
+                                    builder: (context, setState) {
+                                      return Row(
+                                        children: [
+                                          Checkbox(
+                                            value: _jobAvailability,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _jobAvailability = value!;
+                                              });
+                                            },
+                                          ),
+                                          Text('Available'),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Looking for',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  DropdownButtonFormField<String>(
+                                    value: _needProfession,
+                                    items: _professionOptions
+                                        .map((String profession) {
+                                      return DropdownMenuItem<String>(
+                                        value: profession,
+                                        child: Text(profession),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      _needProfession = value!;
+                                    },
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: 150,
+                                    child: ElevatedButton(
+                                      onPressed: _submitForm,
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.update),
+                                          SizedBox(width: 3),
+                                          Text("Update Profile")
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Full Name',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextFormField(
-                            initialValue: _fullName,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            enabled: false,
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Email',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextFormField(
-                            initialValue: _email,
-                            enabled: false,
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Phone Number',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextFormField(
-                            initialValue: _phoneNumber,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your phone number';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              _phoneNumber = value;
-                            },
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Address',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextFormField(
-                            initialValue: _address,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your address';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              _address = value;
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: _submitForm,
-                            child: Text('Update Profile'),
-                          ),
-                          SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: _signOut,
-                            child: Text('Sign Out'),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             );
@@ -187,30 +262,34 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // Form is valid, perform update logic here
-      // You can access the entered values using the _phoneNumber and _address variables
-      // Add your update logic here
 
       // Update the customer document in Firestore
       FirebaseFirestore.instance
           .collection('customer')
-          .doc(widget.userId)
-          .update({
-        'phoneNumber': _phoneNumber,
-        'address': _address,
-      }).then((_) {
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Profile updated successfully'),
-          ),
-        );
-      }).catchError((error) {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error updating profile'),
-          ),
-        );
+          .where('userId', isEqualTo: widget.userId)
+          .get()
+          .then((snapshot) {
+        final workerDoc = snapshot.docs.first;
+        workerDoc.reference.update({
+          'phoneNumber': _phoneNumber,
+          'address': _address,
+          'jobAvailability': _jobAvailability,
+          'needProfession': _needProfession,
+        }).then((_) {
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Profile updated successfully'),
+            ),
+          );
+        }).catchError((error) {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error updating profile'),
+            ),
+          );
+        });
       });
     }
   }

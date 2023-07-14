@@ -37,7 +37,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
     'Attendant',
     'Tutor',
     'Gardener',
-    'Sewerage Cleaner',
+    'Sewerage Cleaner'
   ];
 
   void _submitForm() async {

@@ -18,11 +18,11 @@ class WorkerHomePage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           items: <Widget>[
             Icon(Icons.search, color: Colors.white, size: 30),
-            Icon(Icons.settings, color: Colors.white, size: 30),
             Icon(Icons.compare_arrows, color: Colors.white, size: 30),
+            Icon(Icons.settings, color: Colors.white, size: 30),
           ],
           onTap: (index) {
-            if (index == 1) {
+            if (index == 2) {
               Navigator.push(
                 context,
                 MaterialPageRoute(

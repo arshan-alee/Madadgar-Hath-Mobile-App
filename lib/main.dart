@@ -22,9 +22,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        home: CustomerProfileScreen(
-      userId: 'Ck0bzzbwK3dKf6CYkev5uzGwJYw2',
-    ));
+    return const MaterialApp(home: GetStarted());
   }
 }

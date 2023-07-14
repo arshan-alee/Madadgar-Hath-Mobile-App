@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/customerprofile.dart';
+
+import 'available workers.dart';
 
 class CustomerHomePage extends StatefulWidget {
   final String userId;
@@ -12,14 +15,35 @@ class CustomerHomePage extends StatefulWidget {
 }
 
 class _CustomerHomePageState extends State<CustomerHomePage> {
-  Stream<QuerySnapshot<Map<String, dynamic>>>? workerStream;
+  late String _customerName;
+  final List<String> _professionOptions = [
+    'Maid',
+    'Driver',
+    'Plumber',
+    'Electrician',
+    'Mechanic',
+    'Chef',
+    'Daycare',
+    'Attendant',
+    'Tutor',
+    'Gardener',
+    'Sewerage Cleaner'
+  ];
 
   @override
   void initState() {
     super.initState();
-    // Retrieve the worker registration documents from Firestore
+    // Retrieve the customer's name from Firestore
     final firestore = FirebaseFirestore.instance;
-    workerStream = firestore.collection('worker').snapshots();
+    firestore
+        .collection('customer')
+        .where('userId', isEqualTo: widget.userId)
+        .get()
+        .then((snapshot) {
+      final customerData = snapshot.docs.first.data();
+      _customerName = customerData['fullName'] ?? '';
+      setState(() {});
+    });
   }
 
   Widget build(BuildContext context) {
@@ -33,68 +57,81 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           items: <Widget>[
             Icon(Icons.search, color: Colors.white, size: 30),
             Icon(Icons.settings, color: Colors.white, size: 30),
-            Icon(Icons.compare_arrows, color: Colors.white, size: 30),
           ],
           onTap: (index) {
-            // Handle button tap
-          },
-        ),
-        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: workerStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final workerDocs = snapshot.data!.docs;
-              return SafeArea(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Search',
-                        prefixIcon: Icon(Icons.search),
-                      ),
-                      onChanged: (value) {
-                        // Handle search query
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: workerDocs.length,
-                        itemBuilder: (context, index) {
-                          final workerData = workerDocs[index].data();
-                          final workerName = workerData['fullName'] as String;
-                          final workerPhoneNumber =
-                              workerData['phoneNumber'] as String;
-                          final workerHourlyRate =
-                              workerData['hourlyRate'] as double;
-                          final workerProfession =
-                              workerData['profession'] as String;
-                          return Card(
-                            child: ListTile(
-                              title: Text(workerName),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Profession: $workerProfession'),
-                                  Text('Phone: $workerPhoneNumber'),
-                                  Text(
-                                      'Hourly Rate: \$${workerHourlyRate.toStringAsFixed(2)}'),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+            if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      CustomerProfileScreen(userId: widget.userId),
                 ),
               );
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return CircularProgressIndicator();
             }
           },
+        ),
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'Hello $_customerName',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Need help? We provide blah blah..',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _professionOptions.length,
+                  itemBuilder: (context, index) {
+                    final profession = _professionOptions[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AvailableWorkersPage(
+                              profession: profession,
+                              userId: widget.userId,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        child: Card(
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              child: Text(profession[0]),
+                            ),
+                            title: Text(profession),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
