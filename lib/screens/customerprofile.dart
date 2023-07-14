@@ -26,7 +26,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   String _needProfession = '';
 
   final List<String> _professionOptions = [
-    '',
+    '---',
     'Maid',
     'Driver',
     'Plumber',
@@ -37,7 +37,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     'Attendant',
     'Tutor',
     'Gardener',
-    'Sewerage Cleaner',
+    'Sewerage Cleaner'
   ];
 
   @override
@@ -106,12 +106,25 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Center(
-                                    child: CircleAvatar(
-                                      radius: 50.0,
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 50.0,
-                                      ),
+                                    child: Column(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 50.0,
+                                          child: Icon(
+                                            Icons.person,
+                                            size: 50.0,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(
+                                          'Signed in as ' + _email,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(height: 10),
@@ -127,20 +140,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                       color: Colors.black,
                                     ),
                                     enabled: false,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'Email',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    initialValue: _email,
-                                    enabled: false,
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   Text(
@@ -182,7 +181,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                   ),
                                   SizedBox(height: 10),
                                   Text(
-                                    'JobAvailability',
+                                    'Job Availability',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -212,7 +211,10 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     ),
                                   ),
                                   DropdownButtonFormField<String>(
-                                    value: _needProfession,
+                                    value: _professionOptions
+                                            .contains(_needProfession)
+                                        ? _needProfession
+                                        : null,
                                     items: _professionOptions
                                         .map((String profession) {
                                       return DropdownMenuItem<String>(

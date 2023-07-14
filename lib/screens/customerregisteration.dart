@@ -20,6 +20,7 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
   String _cphoneNumber = '';
   String _caddress = '';
   bool _cjobAvailability = false;
+  String _cneedprofession = '';
   int _ccnic = 0;
 
   void _submitForm() async {
@@ -50,6 +51,7 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
           'address': _caddress,
           'cnic': _ccnic,
           'jobAvailability': _cjobAvailability,
+          'needProfession': _cneedprofession
         });
 
         // Retrieve the newly created document ID

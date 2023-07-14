@@ -46,10 +46,9 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
         color: const Color.fromARGB(255, 1, 31, 56),
         height: 65,
         backgroundColor: Colors.transparent,
-        index: 2,
+        index: 1,
         items: <Widget>[
           Icon(Icons.search, color: Colors.white, size: 30),
-          Icon(Icons.compare_arrows, color: Colors.white, size: 30),
           Icon(Icons.settings, color: Colors.white, size: 30),
         ],
         onTap: (index) {
@@ -105,22 +104,32 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Center(
-                                      child: CircleAvatar(
-                                        radius: 50.0,
-                                        // You can use an image here by specifying the 'backgroundImage' property
-                                        // backgroundImage: AssetImage('path_to_image'),
-                                        child: Icon(
-                                          Icons.person,
-                                          size: 50.0,
-                                        ),
+                                      child: Column(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 50.0,
+                                            child: Icon(
+                                              Icons.person,
+                                              size: 50.0,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          Text(
+                                            'Signed in as ' + _email,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
                                       'Full Name',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     TextFormField(
                                       initialValue: _fullName,
@@ -128,20 +137,6 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                         color: Colors.black,
                                       ),
                                       enabled: false,
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      'Email',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      initialValue: _email,
-                                      enabled: false,
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
@@ -170,7 +165,10 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                       ),
                                     ),
                                     DropdownButtonFormField<String>(
-                                      value: _profession,
+                                      value: _professionOptions
+                                              .contains(_profession)
+                                          ? _profession
+                                          : null,
                                       items: _professionOptions
                                           .map((String profession) {
                                         return DropdownMenuItem<String>(

@@ -15,7 +15,7 @@ class CustomerHomePage extends StatefulWidget {
 }
 
 class _CustomerHomePageState extends State<CustomerHomePage> {
-  late String _customerName;
+  String? _customerName;
   final List<String> _professionOptions = [
     'Maid',
     'Driver',
@@ -41,7 +41,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         .get()
         .then((snapshot) {
       final customerData = snapshot.docs.first.data();
-      _customerName = customerData['fullName'] ?? '';
+      _customerName = customerData['fullName'] as String?;
       setState(() {});
     });
   }
@@ -71,66 +71,88 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           },
         ),
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  'Hello $_customerName',
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    'Hello $_customerName !',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Looking for a Skilled Professional?',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  'Need help? We provide blah blah..',
+                Text(
+                  'Find the perfect worker for your job !',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _professionOptions.length,
-                  itemBuilder: (context, index) {
-                    final profession = _professionOptions[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AvailableWorkersPage(
-                              profession: profession,
-                              userId: widget.userId,
+                SizedBox(height: 10),
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio:
+                          0.8, // Adjust this value for card height
+                    ),
+                    itemCount: _professionOptions.length,
+                    itemBuilder: (context, index) {
+                      final profession = _professionOptions[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AvailableWorkersPage(
+                                profession: profession,
+                                userId: widget.userId,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Card(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 30,
+                                  child: Icon(Icons.person),
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  profession,
+                                  style: TextStyle(
+                                    fontSize:
+                                        14, // Adjust this value for text size
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
                         ),
-                        child: Card(
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              child: Text(profession[0]),
-                            ),
-                            title: Text(profession),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
