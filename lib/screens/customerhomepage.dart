@@ -15,7 +15,7 @@ class CustomerHomePage extends StatefulWidget {
 }
 
 class _CustomerHomePageState extends State<CustomerHomePage> {
-  String? _customerName;
+  String _customerName = '';
   final List<String> _professionOptions = [
     'Maid',
     'Driver',
@@ -41,7 +41,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         .get()
         .then((snapshot) {
       final customerData = snapshot.docs.first.data();
-      _customerName = customerData['fullName'] as String?;
+      _customerName = snapshot.docs.first.get('fullName') ?? '';
       setState(() {});
     });
   }

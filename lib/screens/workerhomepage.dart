@@ -125,17 +125,20 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
                           itemBuilder: (context, index) {
                             final jobData =
                                 jobDocs[index].data() as Map<String, dynamic>;
-                            final fullName = jobData['fullName'] as String;
-                            final address = jobData['address'] as String;
-                            final phoneNumber =
+                            final customerFullName =
+                                jobData['fullName'] as String;
+                            final customerAddress =
+                                jobData['address'] as String;
+                            final customerPhoneNumber =
                                 jobData['phoneNumber'] as String;
-
+                            final customerProfessionNeed =
+                                jobData['needProfession'] as String;
                             return Card(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListTile(
                                   title: Text(
-                                    'Job Title: ${jobData['needProfession']}',
+                                    'Job Title: $customerProfessionNeed',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
@@ -144,11 +147,11 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(height: 2),
-                                      Text('Provider: $fullName'),
+                                      Text('Provider: $customerFullName'),
                                       SizedBox(height: 2),
-                                      Text('Address: $address'),
+                                      Text('Address: $customerAddress'),
                                       SizedBox(height: 2),
-                                      Text('Phone: $phoneNumber'),
+                                      Text('Phone: $customerPhoneNumber'),
                                     ],
                                   ),
                                 ),

@@ -23,6 +23,7 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
   String _profession = '';
   bool _isAvailable = false;
   double _hourlyRate = 0.0;
+  String _description = '';
 
   final List<String> _professionOptions = [
     'Maid',
@@ -79,6 +80,7 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
             _profession = workerData['profession'] as String;
             _isAvailable = workerData['availability'] as bool? ?? false;
             _hourlyRate = workerData['hourlyRate'] as double? ?? 0.0;
+            _description = workerData['description'] as String? ?? '';
 
             return SafeArea(
               child: Center(
@@ -224,6 +226,28 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                         );
                                       },
                                     ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'Give a brief description about yourself',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      initialValue: _description,
+                                      onChanged: (value) {
+                                        _description = value;
+                                      },
+                                      validator: (value) {
+                                        if (_isAvailable &&
+                                            value!.length < 50) {
+                                          return 'Description must be of least 50 characters';
+                                        }
+                                        return null;
+                                      },
+                                      maxLines: _isAvailable ? null : 1,
+                                    ),
+                                    SizedBox(height: 10),
                                     Container(
                                       width: 150,
                                       child: ElevatedButton(
@@ -232,7 +256,7 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                           children: [
                                             Icon(Icons.update),
                                             SizedBox(width: 3),
-                                            Text("Update Profile")
+                                            Text("Update Profile"),
                                           ],
                                         ),
                                       ),
@@ -277,6 +301,7 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
           'profession': _profession,
           'availability': _isAvailable,
           'hourlyRate': _hourlyRate,
+          'description': _description,
         }).then((_) {
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(

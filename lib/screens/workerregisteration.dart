@@ -25,6 +25,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
   int _wcnic = 0;
   double _whourlyRate = 0.0;
   bool _isAvailable = false;
+  String _wdescription = '';
 
   final List<String> _professionOptions = [
     'Maid',
@@ -68,17 +69,15 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
           'profession': _wprofession,
           'cnic': _wcnic,
           'hourlyRate': _whourlyRate,
-          'availability': _isAvailable
+          'availability': _isAvailable,
+          'description': _wdescription
         });
-
-        // Retrieve the newly created document ID
-        final documentId = docRef.id;
 
         // Display a success message
         _showRegistrationSuccessSnackBar();
 
         // Delay navigation to the homepage
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           Navigator.push(
             context,
             MaterialPageRoute(
