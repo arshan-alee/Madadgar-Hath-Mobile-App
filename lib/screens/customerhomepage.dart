@@ -16,16 +16,32 @@ class CustomerHomePage extends StatefulWidget {
 
 class _CustomerHomePageState extends State<CustomerHomePage> {
   String _customerName = '';
+  final Map<String, String> _professionIcons = {
+    'Maid': 'images/maid.png',
+    'Driver': 'images/driver.png.png',
+    'Plumber': 'images/plumber.png',
+    'Mechanic': 'images/mechanic.png',
+    'Chef': 'images/chef.png',
+    'Babysitter': 'images/babysitter.png',
+    'Electrician': 'images/electrician.png',
+    'Attendant': 'images/attendant.png',
+    'Tutor': 'images/tutor.png',
+    'Painter': 'images/painter.png',
+    'Gardener': 'images/gardenerpfp.png',
+    'Sewerage Cleaner': 'images/sewerage cleaner.png',
+  };
+
   final List<String> _professionOptions = [
     'Maid',
     'Driver',
     'Plumber',
-    'Electrician',
     'Mechanic',
     'Chef',
-    'Daycare',
+    'Babysitter',
+    'Electrician',
     'Attendant',
     'Tutor',
+    'Painter',
     'Gardener',
     'Sewerage Cleaner'
   ];
@@ -78,7 +94,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               children: [
                 Center(
                   child: Text(
-                    'Hello $_customerName !',
+                    'Hello $_customerName!',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -94,7 +110,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                   ),
                 ),
                 Text(
-                  'Find the perfect worker for your job !',
+                  'Find the perfect worker for your job!',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
@@ -111,6 +127,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                     itemCount: _professionOptions.length,
                     itemBuilder: (context, index) {
                       final profession = _professionOptions[index];
+                      final iconPath = _professionIcons[profession];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -130,15 +147,16 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CircleAvatar(
-                                  radius: 30,
-                                  child: Icon(Icons.person),
+                                  backgroundColor: Colors.white,
+                                  radius: 40,
+                                  backgroundImage: AssetImage(iconPath!),
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   profession,
                                   style: TextStyle(
                                     fontSize:
-                                        14, // Adjust this value for text size
+                                        16, // Adjust this value for text size
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,

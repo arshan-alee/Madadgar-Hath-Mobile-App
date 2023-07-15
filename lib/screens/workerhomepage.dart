@@ -14,16 +14,32 @@ class WorkerHomePage extends StatefulWidget {
 
 class _WorkerHomePageState extends State<WorkerHomePage> {
   String _workerName = '';
+  String _profession = '';
   late Stream<List<DocumentSnapshot>> _availableJobsStream;
+
+  final Map<String, String> _professionIcons = {
+    'Maid': 'images/maid.png',
+    'Driver': 'images/driver.png',
+    'Plumber': 'images/plumber.png',
+    'Mechanic': 'images/mechanic.png',
+    'Chef': 'images/chef.png',
+    'Babysitter': 'images/babysitter.png',
+    'Electrician': 'images/electrician.png',
+    'Attendant': 'images/attendant.png',
+    'Tutor': 'images/tutor.png',
+    'Painter': 'images/painter.png',
+    'Gardener': 'images/gardenerpfp.png',
+    'Sewerage Cleaner': 'images/sewerage cleaner.png',
+  };
 
   @override
   void initState() {
     super.initState();
-    _fetchUserName();
+    _fetchUserData();
     _fetchAvailableJobs();
   }
 
-  void _fetchUserName() async {
+  void _fetchUserData() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('worker')
         .where('userId', isEqualTo: widget.userId)
@@ -31,6 +47,7 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
 
     setState(() {
       _workerName = snapshot.docs.first.get('fullName') ?? '';
+      _profession = snapshot.docs.first.get('profession') ?? '';
     });
   }
 
@@ -46,7 +63,33 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        extendBody: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        WorkerProfileScreen(userId: widget.userId),
+                  ),
+                );
+              },
+              child: Visibility(
+                visible: _professionIcons.containsKey(_profession),
+                child: Container(
+                  margin: EdgeInsets.only(right: 15),
+                  child: CircleAvatar(
+                    backgroundImage:
+                        AssetImage(_professionIcons[_profession] ?? ''),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
         bottomNavigationBar: CurvedNavigationBar(
           color: const Color.fromARGB(255, 1, 31, 56),
           height: 65,
@@ -69,41 +112,37 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Hello $_workerName !',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Looking for a job?',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Hello $_workerName !',
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 20, fontFamily: 'Manrope-ExtraBold'),
                       ),
-                      Text(
-                        'Check out these available jobs',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      'Looking for a job?',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
+                    ),
+                    Text(
+                      'Check out these available jobs',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    SizedBox(height: 15)
+                  ],
                 ),
                 Expanded(
                   child: StreamBuilder<List<DocumentSnapshot>>(

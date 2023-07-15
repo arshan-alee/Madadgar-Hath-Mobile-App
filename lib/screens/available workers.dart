@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/hireworker.dart';
 
 class AvailableWorkersPage extends StatelessWidget {
   final String profession;
@@ -61,27 +62,46 @@ class AvailableWorkersPage extends StatelessWidget {
                   final workerPhoneNumber = workerData['phoneNumber'] as String;
                   final workerHourlyRate = workerData['hourlyRate'] as double;
                   final workerEmail = workerData['email'] as String;
-                  return Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          title: Text(
-                            workerName,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                  final workerDescription = workerData['description'] as String;
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HireWorkerScreen(
+                            workerName: workerName,
+                            hourlyRate: workerHourlyRate,
+                            phoneNumber: workerPhoneNumber,
+                            email: workerEmail,
+                            profession: profession,
+                            description: workerDescription,
                           ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 2),
-                              Text(
-                                  'Hourly Rate: \$${workerHourlyRate.toStringAsFixed(2)}'),
-                              SizedBox(height: 2),
-                              Text('Phone: $workerPhoneNumber'),
-                              SizedBox(height: 2),
-                              Text('Email: $workerEmail'),
-                            ],
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            title: Text(
+                              workerName,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 2),
+                                Text(
+                                    'Hourly Rate: \$${workerHourlyRate.toStringAsFixed(2)}'),
+                                SizedBox(height: 2),
+                                Text('Phone: $workerPhoneNumber'),
+                                SizedBox(height: 2),
+                                Text('Email: $workerEmail'),
+                              ],
+                            ),
                           ),
                         ),
                       ),

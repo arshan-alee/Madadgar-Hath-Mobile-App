@@ -29,20 +29,62 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
     'Maid',
     'Driver',
     'Plumber',
-    'Electrician',
     'Mechanic',
     'Chef',
-    'Daycare',
+    'Babysitter',
+    'Electrician',
     'Attendant',
     'Tutor',
+    'Painter',
     'Gardener',
     'Sewerage Cleaner',
   ];
 
+  final Map<String, String> _professionIcons = {
+    'Maid': 'images/maid.png',
+    'Driver': 'images/driver.png.png',
+    'Plumber': 'images/plumber.png',
+    'Mechanic': 'images/mechanic.png',
+    'Chef': 'images/chef.png',
+    'Babysitter': 'images/babysitter.png',
+    'Electrician': 'images/electrician.png',
+    'Attendant': 'images/attendant.png',
+    'Tutor': 'images/tutor.png',
+    'Painter': 'images/painter.png',
+    'Gardener': 'images/gardenerpfp.png',
+    'Sewerage Cleaner': 'images/sewerage cleaner.png',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: SizedBox(
+              child: ElevatedButton(
+                onPressed: _showSignOutConfirmationDialog,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 1, 31, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(width: 3),
+                    Text("Sign Out", softWrap: true),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
       bottomNavigationBar: CurvedNavigationBar(
         color: const Color.fromARGB(255, 1, 31, 56),
         height: 65,
@@ -88,13 +130,6 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: ElevatedButton(
-                          onPressed: _signOut,
-                          child: Text('Sign Out'),
-                        ),
-                      ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -109,12 +144,11 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                       child: Column(
                                         children: [
                                           CircleAvatar(
-                                            radius: 50.0,
-                                            child: Icon(
-                                              Icons.person,
-                                              size: 50.0,
-                                            ),
-                                          ),
+                                              radius: 50.0,
+                                              backgroundImage: AssetImage(
+                                                  _professionIcons[
+                                                          _profession] ??
+                                                      '')),
                                           SizedBox(
                                             height: 8,
                                           ),
@@ -256,7 +290,8 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                           children: [
                                             Icon(Icons.update),
                                             SizedBox(width: 3),
-                                            Text("Update Profile"),
+                                            Text("Update Profile",
+                                                softWrap: true),
                                           ],
                                         ),
                                       ),
@@ -319,6 +354,33 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
         });
       });
     }
+  }
+
+  void _showSignOutConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Sign Out'),
+          content: Text('Are you sure you want to sign out?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _signOut();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _signOut() async {

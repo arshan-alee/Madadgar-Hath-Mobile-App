@@ -34,9 +34,10 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
     'Electrician',
     'Mechanic',
     'Chef',
-    'Daycare',
+    'Babysitter',
     'Attendant',
     'Tutor',
+    'Painter',
     'Gardener',
     'Sewerage Cleaner'
   ];

@@ -110,7 +110,7 @@ class _CustomerLoginFormState extends State<CustomerLoginForm> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Sign In',
+                          'Customer Sign In',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

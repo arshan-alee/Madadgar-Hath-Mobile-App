@@ -254,7 +254,7 @@ final List<Onboard> onboard_data = [
           "We provide a platform that simplifies the process, saving you time and effort."),
   Onboard(
       title: "Verified Professionals",
-      image: "images/plumber.png",
+      image: "images/plumberverified.png",
       description:
           "Say goodbye to worries about reliability and authenticity. We pre-verify all our service providers, ensuring you get trustworthy professionals for your tasks."),
   Onboard(

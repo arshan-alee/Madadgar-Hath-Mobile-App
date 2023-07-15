@@ -30,12 +30,13 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     'Maid',
     'Driver',
     'Plumber',
-    'Electrician',
     'Mechanic',
     'Chef',
-    'Daycare',
+    'Babysitter',
+    'Electrician',
     'Attendant',
     'Tutor',
+    'Painter',
     'Gardener',
     'Sewerage Cleaner'
   ];
@@ -43,6 +44,33 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: SizedBox(
+              child: ElevatedButton(
+                onPressed: _showSignOutConfirmationDialog,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 1, 31, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(width: 3),
+                    Text("Sign Out", softWrap: true),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       extendBody: true,
       bottomNavigationBar: CurvedNavigationBar(
         color: const Color.fromARGB(255, 1, 31, 56),
@@ -88,13 +116,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: ElevatedButton(
-                        onPressed: _signOut,
-                        child: Text('Sign Out'),
-                      ),
-                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
@@ -235,7 +256,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                         children: [
                                           Icon(Icons.update),
                                           SizedBox(width: 3),
-                                          Text("Update Profile")
+                                          Text("Update Profile", softWrap: true)
                                         ],
                                       ),
                                     ),
@@ -313,5 +334,32 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         ),
       );
     }
+  }
+
+  void _showSignOutConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Sign Out'),
+          content: Text('Are you sure you want to sign out?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _signOut();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
