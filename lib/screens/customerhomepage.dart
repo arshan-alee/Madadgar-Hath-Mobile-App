@@ -18,7 +18,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   String _customerName = '';
   final Map<String, String> _professionIcons = {
     'Maid': 'images/maid.png',
-    'Driver': 'images/driver.png.png',
+    'Driver': 'images/driver.png',
     'Plumber': 'images/plumber.png',
     'Mechanic': 'images/mechanic.png',
     'Chef': 'images/chef.png',
@@ -152,14 +152,18 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                                   backgroundImage: AssetImage(iconPath!),
                                 ),
                                 SizedBox(height: 10),
-                                Text(
-                                  profession,
-                                  style: TextStyle(
-                                    fontSize:
-                                        16, // Adjust this value for text size
-                                    fontWeight: FontWeight.bold,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    profession,
+                                    softWrap: true,
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),

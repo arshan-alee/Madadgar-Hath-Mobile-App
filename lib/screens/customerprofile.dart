@@ -44,32 +44,37 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 8),
-            child: SizedBox(
-              child: ElevatedButton(
-                onPressed: _showSignOutConfirmationDialog,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 1, 31, 56),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(35.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          actions: [
+            Container(
+              margin: EdgeInsets.only(right: 20),
+              child: Container(
+                width: 85,
+                child: ElevatedButton(
+                  onPressed: _showSignOutConfirmationDialog,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 1, 31, 56),
                   ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 3),
-                    Text("Sign Out", softWrap: true),
-                  ],
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout),
+                        SizedBox(width: 3),
+                        Text("Sign Out",
+                            overflow: TextOverflow.clip, softWrap: true),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       extendBody: true,
       bottomNavigationBar: CurvedNavigationBar(
@@ -118,7 +123,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: Center(
                           child: SingleChildScrollView(
                             child: Form(
@@ -149,6 +154,34 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 10),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      width: 120,
+                                      child: ElevatedButton(
+                                        onPressed: _deleteAccount,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                        ),
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.delete),
+                                              SizedBox(width: 3),
+                                              Text(
+                                                "Delete Account",
+                                                textAlign: TextAlign.center,
+                                                softWrap: true,
+                                                overflow: TextOverflow.clip,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
                                   Text(
                                     'Full Name',
                                     style: TextStyle(
@@ -161,6 +194,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                       color: Colors.black,
                                     ),
                                     enabled: false,
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.person),
+                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   Text(
@@ -180,6 +216,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     onChanged: (value) {
                                       _phoneNumber = value;
                                     },
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.phone),
+                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   Text(
@@ -199,6 +238,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     onChanged: (value) {
                                       _address = value;
                                     },
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.home),
+                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   Text(
@@ -246,18 +288,29 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     onChanged: (value) {
                                       _needProfession = value!;
                                     },
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.work),
+                                    ),
                                   ),
                                   SizedBox(height: 10),
                                   Container(
-                                    width: 150,
+                                    width: 120,
                                     child: ElevatedButton(
                                       onPressed: _submitForm,
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.update),
-                                          SizedBox(width: 3),
-                                          Text("Update Profile", softWrap: true)
-                                        ],
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.update),
+                                            SizedBox(width: 3),
+                                            Text(
+                                              "Update Profile",
+                                              textAlign: TextAlign.center,
+                                              softWrap: true,
+                                              overflow: TextOverflow.clip,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -292,8 +345,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
           .where('userId', isEqualTo: widget.userId)
           .get()
           .then((snapshot) {
-        final workerDoc = snapshot.docs.first;
-        workerDoc.reference.update({
+        final customerDoc = snapshot.docs.first;
+        customerDoc.reference.update({
           'phoneNumber': _phoneNumber,
           'address': _address,
           'jobAvailability': _jobAvailability,
@@ -355,6 +408,69 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
               child: Text('No'),
               onPressed: () {
                 Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteAccount() async {
+    // Show delete confirmation dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Account Deletion'),
+          content: Text('Are you sure you want to delete your account?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () async {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CustomerLoginForm(),
+                  ),
+                );
+                // Delete user from Firebase Authentication
+                final user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  await user.delete();
+                }
+
+                // Delete document from 'customer' collection in Firestore
+                FirebaseFirestore.instance
+                    .collection('customer')
+                    .where('userId', isEqualTo: widget.userId)
+                    .get()
+                    .then((snapshot) {
+                  final customerDoc = snapshot.docs.first;
+                  customerDoc.reference.delete().then((_) {
+                    // Show success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Account deleted successfully'),
+                      ),
+                    );
+                  }).catchError((error) {
+                    // Show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error deleting account'),
+                      ),
+                    );
+                  });
+                });
+                Navigator.pop(context); // Close the confirmation dialog
+              },
+            ),
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.pop(context); // Close the confirmation dialog
               },
             ),
           ],

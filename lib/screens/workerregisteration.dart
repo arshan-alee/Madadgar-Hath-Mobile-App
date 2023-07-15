@@ -281,23 +281,6 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               });
                             },
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Hourly Rate',
-                              prefixIcon: Icon(Icons.attach_money),
-                            ),
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter an hourly rate';
-                              }
-                              // Add hourly rate validation logic here if needed
-                              return null;
-                            },
-                            onChanged: (value) {
-                              _whourlyRate = double.parse(value);
-                            },
-                          ),
                           SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: _submitForm,
