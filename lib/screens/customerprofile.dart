@@ -58,7 +58,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 child: ElevatedButton(
                   onPressed: _showSignOutConfirmationDialog,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 1, 31, 56),
+                    backgroundColor: Colors.orange,
                   ),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,

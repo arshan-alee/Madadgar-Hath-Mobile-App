@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:madadgarhath/screens/customerprofile.dart';
+import 'package:madadgarhath/screens/workerprofile.dart';
+import 'customerhomepage.dart';
 
 class PostJobScreen extends StatefulWidget {
   final String userId;
@@ -31,68 +34,33 @@ class _PostJobScreenState extends State<PostJobScreen> {
 
   bool _jobAvailability = false;
   String _needProfession = '';
-  String _jobHours = '';
+  double _jobHours = 0.0;
   String _jobDescription = '';
 
   bool _isJobPosted = false;
 
-  void _postJob() {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isJobPosted = true;
-      });
+  @override
+  void initState() {
+    super.initState();
+    _fetchJobData();
+  }
 
-      final firestore = FirebaseFirestore.instance;
-      final jobData = {
-        'userId': widget.userId,
-        'jobAvailability': _jobAvailability,
-        'needProfession': _needProfession,
-        'jobHours': _jobHours,
-        'jobDescription': _jobDescription,
-      };
-      firestore
-          .collection('customer')
-          .doc(widget.userId)
-          .update(jobData)
-          .then((_) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Success'),
-              content: Text('Job posted successfully.'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop(); // Pop back to home screen
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      }).catchError((error) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text('Failed to post job. Please try again later.'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      });
-    }
+  void _fetchJobData() {
+    FirebaseFirestore.instance
+        .collection('customer')
+        .where('userId', isEqualTo: widget.userId)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        final customerData = snapshot.docs[0].data() as Map<String, dynamic>;
+        setState(() {
+          _jobAvailability = customerData['jobAvailability'] as bool? ?? false;
+          _needProfession = customerData['needProfession'] as String? ?? '';
+          _jobHours = (customerData['jobHours'] as num?)?.toDouble() ?? 0.0;
+          _jobDescription = customerData['jobDescription'] as String? ?? '';
+        });
+      }
+    });
   }
 
   @override
@@ -114,6 +82,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
         color: const Color.fromARGB(255, 1, 31, 56),
         height: 65,
         backgroundColor: Colors.transparent,
+        index: 1,
         items: <Widget>[
           Icon(Icons.search, color: Colors.white, size: 30),
           Icon(Icons.assignment_add, color: Colors.white, size: 30),
@@ -121,9 +90,20 @@ class _PostJobScreenState extends State<PostJobScreen> {
         ],
         onTap: (index) {
           if (index == 0) {
-            // Handle search icon tapped
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CustomerHomePage(userId: widget.userId),
+              ),
+            );
           } else if (index == 2) {
-            // Handle settings icon tapped
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    CustomerProfileScreen(userId: widget.userId),
+              ),
+            );
           }
         },
       ),
@@ -187,11 +167,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isJobPosted = false;
-                });
-              },
+              onPressed: _updateJob,
               child: Text('Update'),
             ),
           ],
@@ -269,16 +245,19 @@ class _PostJobScreenState extends State<PostJobScreen> {
             ),
           ),
           TextFormField(
+            initialValue: _jobHours.toString(),
             onChanged: (value) {
-              _jobHours = value;
+              setState(() {
+                _jobHours = double.tryParse(value) ?? 0.0;
+              });
             },
             decoration: InputDecoration(
               hintText: 'Enter job hours',
               prefixIcon: Icon(Icons.access_time),
             ),
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter job hours';
+              if (value == null || value.isEmpty || double.parse(value) < 0.5) {
+                return 'Please enter valid job hours';
               }
               return null;
             },
@@ -291,19 +270,23 @@ class _PostJobScreenState extends State<PostJobScreen> {
             ),
           ),
           TextFormField(
+            initialValue: _jobDescription,
             onChanged: (value) {
-              _jobDescription = value;
+              setState(() {
+                _jobDescription = value;
+              });
             },
             decoration: InputDecoration(
               hintText: 'Enter job description',
               prefixIcon: Icon(Icons.description),
             ),
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter job description';
+              if (value!.length < 20) {
+                return 'Description must be at least 20 characters';
               }
               return null;
             },
+            maxLines: _jobAvailability ? null : 1,
           ),
           SizedBox(height: 20),
           ElevatedButton(
@@ -313,5 +296,92 @@ class _PostJobScreenState extends State<PostJobScreen> {
         ],
       ),
     );
+  }
+
+  void _postJob() {
+    if (_formKey.currentState!.validate()) {
+      final firestore = FirebaseFirestore.instance;
+      final jobData = {
+        'jobAvailability': _jobAvailability,
+        'needProfession': _needProfession,
+        'jobHours': _jobHours,
+        'jobDescription': _jobDescription,
+      };
+
+      firestore
+          .collection('customer')
+          .where('userId', isEqualTo: widget.userId)
+          .get()
+          .then((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          snapshot.docs.forEach((doc) {
+            doc.reference.update(jobData).then((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Job posted successfully'),
+                ),
+              );
+              setState(() {
+                _isJobPosted = true;
+              });
+            }).catchError((error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Failed to post job. Please try again later.'),
+                ),
+              );
+            });
+          });
+        }
+      });
+    }
+  }
+
+  void _updateJob() {
+    if (_formKey.currentState!.validate()) {
+      final firestore = FirebaseFirestore.instance;
+      final jobData = {
+        'jobAvailability': _jobAvailability,
+        'needProfession': _needProfession,
+        'jobHours': _jobHours,
+        'jobDescription': _jobDescription,
+      };
+
+      firestore
+          .collection('customer')
+          .where('userId', isEqualTo: widget.userId)
+          .get()
+          .then((snapshot) {
+        if (snapshot.docs.isNotEmpty) {
+          snapshot.docs.forEach((doc) {
+            doc.reference.update(jobData).then((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Job Updated successfully'),
+                ),
+              );
+              setState(() {
+                _isJobPosted = false;
+                _needProfession = '';
+                _jobHours = 0.0;
+                _jobDescription = '';
+              });
+            }).catchError((error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Error updating the job'),
+                ),
+              );
+            });
+          });
+        }
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error fetching the job data'),
+          ),
+        );
+      });
+    }
   }
 }

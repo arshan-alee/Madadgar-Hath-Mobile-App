@@ -51,46 +51,77 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
       final firestore = FirebaseFirestore.instance;
 
       try {
-        // Create the user with email and password
-        final userCredential = await auth.createUserWithEmailAndPassword(
-          email: _wemail,
-          password: _wpassword,
-        );
+        // Check if the CNIC exists in the 'national record' collection
+        final nationalRecordQuery = await firestore
+            .collection('national record')
+            .where('cnic', isEqualTo: _wcnic)
+            .get();
 
-        // Retrieve the user ID
-        final userId = userCredential.user!.uid;
+        if (nationalRecordQuery.docs.isNotEmpty) {
+          // CNIC is present in the 'national record' collection
 
-        // Create a document reference for the worker registration data
-        final docRef = await firestore.collection('worker').add({
-          'userId': userId,
-          'fullName': _wfullName,
-          'email': _wemail,
-          'password': _wpassword,
-          'phoneNumber': _wphoneNumber,
-          'profession': _wprofession,
-          'cnic': _wcnic,
-          'hourlyRate': _whourlyRate,
-          'availability': _isAvailable,
-          'description': _wdescription
-        });
+          // Check if the CNIC exists in the 'criminal record' collection
+          final criminalRecordQuery = await firestore
+              .collection('criminal record')
+              .where('cnic', isEqualTo: _wcnic)
+              .get();
 
-        // Display a success message
-        _showRegistrationSuccessSnackBar();
+          if (criminalRecordQuery.docs.isNotEmpty) {
+            // CNIC is present in the 'criminal record' collection
+            _showErrorSnackBar(
+              'Your CNIC was found in the criminal record. Please contact the management.',
+              Colors.red,
+            );
+            return;
+          }
 
-        // Delay navigation to the homepage
-        Future.delayed(const Duration(seconds: 5), () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkerHomePage(userId: userId),
-            ),
+          // Create the user with email and password
+          final userCredential = await auth.createUserWithEmailAndPassword(
+            email: _wemail,
+            password: _wpassword,
           );
-        });
+
+          // Retrieve the user ID
+          final userId = userCredential.user!.uid;
+
+          // Create a document reference for the worker registration data
+          final docRef = await firestore.collection('worker').add({
+            'userId': userId,
+            'fullName': _wfullName,
+            'email': _wemail,
+            'password': _wpassword,
+            'phoneNumber': _wphoneNumber,
+            'profession': _wprofession,
+            'cnic': _wcnic,
+            'hourlyRate': _whourlyRate,
+            'availability': _isAvailable,
+            'description': _wdescription
+          });
+
+          // Display a success message
+          _showRegistrationSuccessSnackBar();
+
+          // Delay navigation to the homepage
+          Future.delayed(const Duration(seconds: 5), () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkerHomePage(userId: userId),
+              ),
+            );
+          });
+        } else {
+          // CNIC is not present in the 'national record' collection
+          _showErrorSnackBar(
+            'Your CNIC is not registered in the national record.',
+            Colors.red,
+          );
+        }
       } catch (e) {
         // Handle any errors that occur during data saving
         print('Error saving data: $e');
         // Display an error message
-        _showErrorSnackBar();
+        _showErrorSnackBar('Error occurred during registration', Colors.red);
       }
     }
   }
@@ -101,6 +132,8 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
         content: Text(
           'Registration successful',
           textAlign: TextAlign.center,
+          softWrap: true,
+          overflow: TextOverflow.clip,
         ),
         duration: Duration(seconds: 5),
         backgroundColor: Colors.green,
@@ -108,15 +141,26 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
     );
   }
 
-  void _showErrorSnackBar() {
+  void _showErrorSnackBar(String message, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          'Error occurred during registration',
-          textAlign: TextAlign.center,
+        content: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                overflow: TextOverflow.clip,
+              ),
+            ],
+          ),
         ),
         duration: Duration(seconds: 5),
-        backgroundColor: Colors.red,
+        backgroundColor: backgroundColor,
       ),
     );
   }

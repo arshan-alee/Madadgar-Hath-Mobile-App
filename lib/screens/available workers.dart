@@ -20,6 +20,8 @@ class AvailableWorkersPage extends StatelessWidget {
         elevation: 0.0,
         title: Text(
           'Available $profession',
+          softWrap: true,
+          overflow: TextOverflow.clip,
           style: TextStyle(
             color: Colors.black,
           ),

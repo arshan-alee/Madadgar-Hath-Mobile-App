@@ -34,50 +34,81 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
       final firestore = FirebaseFirestore.instance;
 
       try {
-        // Create the user with email and password
-        final userCredential = await auth.createUserWithEmailAndPassword(
-          email: _cemail,
-          password: _cpassword,
-        );
+        // Check if the CNIC exists in the 'national record' collection
+        final nationalRecordQuery = await firestore
+            .collection('national record')
+            .where('cnic', isEqualTo: _ccnic)
+            .get();
 
-        // Retrieve the user ID
-        final userId = userCredential.user!.uid;
+        if (nationalRecordQuery.docs.isNotEmpty) {
+          // CNIC is present in the 'national record' collection
 
-        // Create a document reference for the customer registration data
-        final docRef = await firestore.collection('customer').add({
-          'userId': userId,
-          'fullName': _cfullName,
-          'email': _cemail,
-          'password': _cpassword,
-          'phoneNumber': _cphoneNumber,
-          'address': _caddress,
-          'cnic': _ccnic,
-          'jobAvailability': _cjobAvailability,
-          'needProfession': _cneedprofession,
-          'jobDescription': _cjobDescription,
-          'jobHours': _cjobHours
-        });
+          // Check if the CNIC exists in the 'criminal record' collection
+          final criminalRecordQuery = await firestore
+              .collection('criminal record')
+              .where('cnic', isEqualTo: _ccnic)
+              .get();
 
-        // Retrieve the newly created document ID
-        final documentId = docRef.id;
+          if (criminalRecordQuery.docs.isNotEmpty) {
+            // CNIC is present in the 'criminal record' collection
+            _showErrorSnackBar(
+              'Your CNIC was found in the criminal record. Please contact the management.',
+              Colors.red,
+            );
+            return;
+          }
 
-        // Display a success message
-        _showRegistrationSuccessSnackBar();
-
-        // Delay navigation to the homepage
-        Future.delayed(Duration(seconds: 5), () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CustomerHomePage(userId: userId),
-            ),
+          // Create the user with email and password
+          final userCredential = await auth.createUserWithEmailAndPassword(
+            email: _cemail,
+            password: _cpassword,
           );
-        });
+
+          // Retrieve the user ID
+          final userId = userCredential.user!.uid;
+
+          // Create a document reference for the customer registration data
+          final docRef = await firestore.collection('customer').add({
+            'userId': userId,
+            'fullName': _cfullName,
+            'email': _cemail,
+            'password': _cpassword,
+            'phoneNumber': _cphoneNumber,
+            'address': _caddress,
+            'cnic': _ccnic,
+            'jobAvailability': _cjobAvailability,
+            'needProfession': _cneedprofession,
+            'jobDescription': _cjobDescription,
+            'jobHours': _cjobHours
+          });
+
+          // Retrieve the newly created document ID
+          final documentId = docRef.id;
+
+          // Display a success message
+          _showRegistrationSuccessSnackBar();
+
+          // Delay navigation to the homepage
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CustomerHomePage(userId: userId),
+              ),
+            );
+          });
+        } else {
+          // CNIC is not present in the 'national record' collection
+          _showErrorSnackBar(
+            'Your CNIC is not registered in the national record.',
+            Colors.red,
+          );
+        }
       } catch (e) {
         // Handle any errors that occur during data saving
         print('Error saving data: $e');
         // Display an error message
-        _showErrorSnackBar();
+        _showErrorSnackBar('Error occurred during registration', Colors.red);
       }
     }
   }
@@ -88,6 +119,8 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
         content: Text(
           'Registration successful',
           textAlign: TextAlign.center,
+          softWrap: true,
+          overflow: TextOverflow.clip,
         ),
         duration: Duration(seconds: 5),
         backgroundColor: Colors.green,
@@ -95,15 +128,26 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
     );
   }
 
-  void _showErrorSnackBar() {
+  void _showErrorSnackBar(String message, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          'Error occurred during registration',
-          textAlign: TextAlign.center,
+        content: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            children: [
+              Icon(Icons.error, color: Colors.white),
+              SizedBox(width: 8),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                overflow: TextOverflow.clip,
+              ),
+            ],
+          ),
         ),
         duration: Duration(seconds: 5),
-        backgroundColor: Colors.red,
+        backgroundColor: backgroundColor,
       ),
     );
   }
