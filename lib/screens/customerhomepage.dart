@@ -105,25 +105,20 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                   child: Text(
                     'Hello $_customerName!',
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 20, fontFamily: 'Manrope-ExtraBold'),
                   ),
                 ),
                 SizedBox(height: 20),
                 Text(
                   'Looking for a Skilled Professional?',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontFamily: 'Manrope-Bold'),
                 ),
                 Text(
                   'Find the perfect worker for your job!',
                   style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
+                      fontSize: 16,
+                      color: Colors.grey,
+                      fontFamily: 'Manrope-Regular'),
                 ),
                 SizedBox(height: 10),
                 Expanded(

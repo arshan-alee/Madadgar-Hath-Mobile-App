@@ -50,7 +50,7 @@ class JobDetailsScreen extends StatelessWidget {
                         Text(
                           'Job Title: ${jobData['needProfession']}',
                           style: TextStyle(
-                            fontSize: 30,
+                            fontSize: 20,
                             fontFamily: 'Manrope-ExtraBold',
                           ),
                         ),

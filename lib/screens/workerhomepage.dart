@@ -133,15 +133,15 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
                       'Looking for a job?',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Manrope-Bold',
                       ),
                     ),
                     Text(
                       'Check out these available jobs',
                       style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
+                          fontSize: 16,
+                          color: Colors.grey,
+                          fontFamily: 'Manrope-Regular'),
                     ),
                     SizedBox(height: 15),
                   ],

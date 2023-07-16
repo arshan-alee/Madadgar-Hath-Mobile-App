@@ -59,7 +59,7 @@ class HireWorkerScreen extends StatelessWidget {
                             Text(
                               workerName,
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 20,
                                 fontFamily: 'Manrope-ExtraBold',
                               ),
                             ),
