@@ -170,34 +170,6 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 10),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Container(
-                                        width: 120,
-                                        child: ElevatedButton(
-                                          onPressed: _deleteAccount,
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red,
-                                          ),
-                                          child: FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            child: Row(
-                                              children: [
-                                                Icon(Icons.delete),
-                                                SizedBox(width: 3),
-                                                Text(
-                                                  "Delete Account",
-                                                  textAlign: TextAlign.center,
-                                                  softWrap: true,
-                                                  overflow: TextOverflow.clip,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
                                     Text(
                                       'Full Name',
                                       style: TextStyle(
@@ -212,6 +184,30 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                       enabled: false,
                                       decoration: InputDecoration(
                                         prefixIcon: Icon(Icons.person),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'Give a brief description about yourself',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      initialValue: _description,
+                                      onChanged: (value) {
+                                        _description = value;
+                                      },
+                                      validator: (value) {
+                                        if (_isAvailable &&
+                                            value!.length < 50) {
+                                          return 'Description must be at least 50 characters';
+                                        }
+                                        return null;
+                                      },
+                                      maxLines: _isAvailable ? null : 1,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.description),
                                       ),
                                     ),
                                     SizedBox(height: 10),
@@ -314,30 +310,6 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 10),
-                                    Text(
-                                      'Give a brief description about yourself',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      initialValue: _description,
-                                      onChanged: (value) {
-                                        _description = value;
-                                      },
-                                      validator: (value) {
-                                        if (_isAvailable &&
-                                            value!.length < 50) {
-                                          return 'Description must be at least 50 characters';
-                                        }
-                                        return null;
-                                      },
-                                      maxLines: _isAvailable ? null : 1,
-                                      decoration: InputDecoration(
-                                        prefixIcon: Icon(Icons.description),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
                                     Container(
                                       width: 150,
                                       child: ElevatedButton(
@@ -359,6 +331,35 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
                                         ),
                                       ),
                                     ),
+                                    SizedBox(height: 10),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        width: 120,
+                                        child: ElevatedButton(
+                                          onPressed: _deleteAccount,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                          ),
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.delete),
+                                                SizedBox(width: 3),
+                                                Text(
+                                                  "Delete Account",
+                                                  textAlign: TextAlign.center,
+                                                  softWrap: true,
+                                                  overflow: TextOverflow.clip,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
                                   ],
                                 ),
                               ),
@@ -484,7 +485,6 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
             TextButton(
               child: Text('Yes'),
               onPressed: () async {
-                Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

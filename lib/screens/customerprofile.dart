@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/customerhomepage.dart';
 import 'package:madadgarhath/screens/customerlogin.dart';
+import 'package:madadgarhath/screens/postjob.dart';
 
 class CustomerProfileScreen extends StatefulWidget {
   final String userId;
@@ -81,9 +82,10 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         color: const Color.fromARGB(255, 1, 31, 56),
         height: 65,
         backgroundColor: Colors.transparent,
-        index: 1,
+        index: 2,
         items: <Widget>[
           Icon(Icons.search, color: Colors.white, size: 30),
+          Icon(Icons.assignment_add, color: Colors.white, size: 30),
           Icon(Icons.settings, color: Colors.white, size: 30),
         ],
         onTap: (index) {
@@ -92,6 +94,13 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => CustomerHomePage(userId: widget.userId),
+              ),
+            );
+          } else if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PostJobScreen(userId: widget.userId),
               ),
             );
           }
@@ -151,34 +160,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                               color: Colors.grey),
                                         ),
                                       ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      width: 120,
-                                      child: ElevatedButton(
-                                        onPressed: _deleteAccount,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red,
-                                        ),
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.delete),
-                                              SizedBox(width: 3),
-                                              Text(
-                                                "Delete Account",
-                                                textAlign: TextAlign.center,
-                                                softWrap: true,
-                                                overflow: TextOverflow.clip,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
                                     ),
                                   ),
                                   SizedBox(height: 10),
@@ -243,56 +224,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 10),
-                                  Text(
-                                    'Job Availability',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return Row(
-                                        children: [
-                                          Checkbox(
-                                            value: _jobAvailability,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _jobAvailability = value!;
-                                              });
-                                            },
-                                          ),
-                                          Text('Available'),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'Looking for',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  DropdownButtonFormField<String>(
-                                    value: _professionOptions
-                                            .contains(_needProfession)
-                                        ? _needProfession
-                                        : null,
-                                    items: _professionOptions
-                                        .map((String profession) {
-                                      return DropdownMenuItem<String>(
-                                        value: profession,
-                                        child: Text(profession),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      _needProfession = value!;
-                                    },
-                                    decoration: InputDecoration(
-                                      prefixIcon: Icon(Icons.work),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
                                   Container(
                                     width: 120,
                                     child: ElevatedButton(
@@ -314,6 +245,35 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                       ),
                                     ),
                                   ),
+                                  SizedBox(height: 10),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      width: 120,
+                                      child: ElevatedButton(
+                                        onPressed: _deleteAccount,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                        ),
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.delete),
+                                              SizedBox(width: 3),
+                                              Text(
+                                                "Delete Account",
+                                                textAlign: TextAlign.center,
+                                                softWrap: true,
+                                                overflow: TextOverflow.clip,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
                                 ],
                               ),
                             ),

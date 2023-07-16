@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/customerprofile.dart';
+import 'package:madadgarhath/screens/postjob.dart';
 
 import 'available workers.dart';
 
@@ -72,10 +73,18 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           backgroundColor: Colors.transparent,
           items: <Widget>[
             Icon(Icons.search, color: Colors.white, size: 30),
+            Icon(Icons.assignment_add, color: Colors.white, size: 30),
             Icon(Icons.settings, color: Colors.white, size: 30),
           ],
           onTap: (index) {
             if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostJobScreen(userId: widget.userId),
+                ),
+              );
+            } else if (index == 2) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
