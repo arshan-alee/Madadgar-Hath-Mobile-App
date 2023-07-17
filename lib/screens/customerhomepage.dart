@@ -139,7 +139,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                             MaterialPageRoute(
                               builder: (context) => AvailableWorkersPage(
                                 profession: profession,
-                                userId: widget.userId,
+                                customeruserId: widget.userId,
+                                customeruserName: _customerName,
                               ),
                             ),
                           );

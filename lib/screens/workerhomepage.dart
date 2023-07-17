@@ -174,6 +174,7 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
                                 jobData['phoneNumber'] as String;
                             final customerProfessionNeed =
                                 jobData['needProfession'] as String;
+                            final jobHours = jobData['jobHours'] as double;
                             return Card(
                               child: InkWell(
                                 onTap: () {

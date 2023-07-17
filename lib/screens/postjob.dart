@@ -58,6 +58,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
           _needProfession = customerData['needProfession'] as String? ?? '';
           _jobHours = (customerData['jobHours'] as num?)?.toDouble() ?? 0.0;
           _jobDescription = customerData['jobDescription'] as String? ?? '';
+          _isJobPosted = customerData['jobPosted'] as bool? ?? false;
         });
       }
     });
@@ -246,6 +247,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
           ),
           TextFormField(
             initialValue: _jobHours.toString(),
+            keyboardType: TextInputType.number,
             onChanged: (value) {
               setState(() {
                 _jobHours = double.tryParse(value) ?? 0.0;
@@ -306,6 +308,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
         'needProfession': _needProfession,
         'jobHours': _jobHours,
         'jobDescription': _jobDescription,
+        'jobPosted': _isJobPosted
       };
 
       firestore
@@ -345,6 +348,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
         'needProfession': _needProfession,
         'jobHours': _jobHours,
         'jobDescription': _jobDescription,
+        'jobPosted': _isJobPosted
       };
 
       firestore

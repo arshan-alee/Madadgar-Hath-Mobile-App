@@ -24,6 +24,7 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
   String _cjobDescription = '';
   int _ccnic = 0;
   double _cjobHours = 0.0;
+  bool _isJobPosted = false;
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -79,7 +80,8 @@ class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
             'jobAvailability': _cjobAvailability,
             'needProfession': _cneedprofession,
             'jobDescription': _cjobDescription,
-            'jobHours': _cjobHours
+            'jobHours': _cjobHours,
+            'jobPosted': _isJobPosted
           });
 
           // Retrieve the newly created document ID

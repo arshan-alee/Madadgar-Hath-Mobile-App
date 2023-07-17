@@ -4,12 +4,14 @@ import 'package:madadgarhath/screens/hireworker.dart';
 
 class AvailableWorkersPage extends StatelessWidget {
   final String profession;
-  final String userId;
+  final String customeruserId;
+  final String customeruserName;
 
   const AvailableWorkersPage({
     Key? key,
     required this.profession,
-    required this.userId,
+    required this.customeruserId,
+    required this.customeruserName,
   }) : super(key: key);
 
   @override
@@ -50,6 +52,9 @@ class AvailableWorkersPage extends StatelessWidget {
               return Center(
                 child: Text(
                   'No available $profession at the moment.',
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  overflow: TextOverflow.clip,
                   style: TextStyle(fontSize: 16),
                 ),
               );
@@ -61,6 +66,7 @@ class AvailableWorkersPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final workerData = workerDocs[index].data();
                   final workerName = workerData['fullName'] as String;
+                  final workeruserId = workerData['userId'] as String;
                   final workerPhoneNumber = workerData['phoneNumber'] as String;
                   final workerHourlyRate = workerData['hourlyRate'] as double;
                   final workerEmail = workerData['email'] as String;
@@ -72,6 +78,9 @@ class AvailableWorkersPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => HireWorkerScreen(
+                            customeruserId: customeruserId,
+                            customeruserName: customeruserName,
+                            workeruserId: workeruserId,
                             workerName: workerName,
                             hourlyRate: workerHourlyRate,
                             phoneNumber: workerPhoneNumber,

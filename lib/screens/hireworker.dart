@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-class HireWorkerScreen extends StatelessWidget {
+import 'checkoutpage.dart';
+
+class HireWorkerScreen extends StatefulWidget {
   final String workerName;
   final double hourlyRate;
   final String phoneNumber;
   final String email;
   final String description;
   final String profession;
-
+  final String customeruserId;
+  final String customeruserName;
+  final String workeruserId;
   const HireWorkerScreen({
     Key? key,
     required this.workerName,
@@ -16,7 +20,17 @@ class HireWorkerScreen extends StatelessWidget {
     required this.email,
     required this.description,
     required this.profession,
+    required this.customeruserId,
+    required this.customeruserName,
+    required this.workeruserId,
   }) : super(key: key);
+
+  @override
+  _HireWorkerScreenState createState() => _HireWorkerScreenState();
+}
+
+class _HireWorkerScreenState extends State<HireWorkerScreen> {
+  double _totalJobHours = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +39,7 @@ class HireWorkerScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
-          'Hire $profession',
+          'Hire ${widget.profession}',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -57,7 +71,7 @@ class HireWorkerScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              workerName,
+                              widget.workerName,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'Manrope-ExtraBold',
@@ -65,7 +79,7 @@ class HireWorkerScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              'Hourly Rate: \$${hourlyRate.toStringAsFixed(2)}',
+                              'Hourly Rate: \$${widget.hourlyRate.toStringAsFixed(2)}',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey,
@@ -73,7 +87,7 @@ class HireWorkerScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              'Phone: $phoneNumber',
+                              'Phone: ${widget.phoneNumber}',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey,
@@ -81,7 +95,7 @@ class HireWorkerScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              'Email: $email',
+                              'Email: ${widget.email}',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey,
@@ -90,7 +104,7 @@ class HireWorkerScreen extends StatelessWidget {
                             SizedBox(height: 10),
                             SizedBox(height: 10),
                             Text(
-                              description,
+                              widget.description,
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -102,14 +116,40 @@ class HireWorkerScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
+                TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      _totalJobHours = double.tryParse(value) ?? 0.0;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Total Job Hours',
+                    prefixIcon: Icon(Icons.timer),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                SizedBox(height: 20),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 20),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Add your hire logic here
-                        // This button is fixed at the bottom and is not affected by page scroll
+                        double totalAmount = widget.hourlyRate * _totalJobHours;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CheckoutScreen(
+                              customeruserId: widget.customeruserId,
+                              customeruserName: widget.customeruserName,
+                              workeruserId: widget.workeruserId,
+                              workerName: widget.workerName,
+                              totalJobHours: _totalJobHours,
+                              hourlyRate: widget.hourlyRate,
+                              totalAmount: totalAmount,
+                            ),
+                          ),
+                        );
                       },
                       child: Text(
                         'Hire',

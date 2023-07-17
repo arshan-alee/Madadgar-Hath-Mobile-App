@@ -39,6 +39,7 @@ dependencies:
   firebase_auth:
   cloud_firestore:
   firebase_core:
+  flutter_paypal:
 
 dev_dependencies:
   flutter_test:
