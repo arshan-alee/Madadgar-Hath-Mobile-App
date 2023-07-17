@@ -54,67 +54,69 @@ class SubmitProposalScreen extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    'Applying for: ${jobData['needProfession']}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      'Applying for: ${jobData['needProfession']}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Job Provider: ${jobData['fullName']}',
-                  style: TextStyle(fontSize: 14),
-                ),
-                Text(
-                  'Job Hours: ${jobData['jobHours']}',
-                  style: TextStyle(fontSize: 14),
-                ),
-                Text(
-                  'Address: ${jobData['address']}',
-                  style: TextStyle(fontSize: 14),
-                ),
-                SizedBox(height: 50),
-                Center(
-                  child: Text(
-                    'Cover Letter:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  SizedBox(height: 16),
+                  Text(
+                    'Job Provider: ${jobData['fullName']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    'Job Hours: ${jobData['jobHours']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    'Address: ${jobData['address']}',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 50),
+                  Center(
+                    child: Text(
+                      'Cover Letter:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 8),
-                TextFormField(
-                  initialValue: workerDescription,
-                  decoration: InputDecoration(
-                    labelText: 'Cover Letter',
-                    prefixIcon: Icon(Icons.description),
+                  SizedBox(height: 8),
+                  TextFormField(
+                    initialValue: workerDescription,
+                    decoration: InputDecoration(
+                      labelText: 'Cover Letter',
+                      prefixIcon: Icon(Icons.description),
+                    ),
+                    maxLines: 5,
                   ),
-                  maxLines: 5,
-                ),
-                SizedBox(height: 8),
-                TextFormField(
-                  initialValue: workerHourlyRate.toString(),
-                  decoration: InputDecoration(
-                    labelText: 'Hourly Rate',
-                    prefixIcon: Icon(Icons.attach_money),
+                  SizedBox(height: 8),
+                  TextFormField(
+                    initialValue: workerHourlyRate.toString(),
+                    decoration: InputDecoration(
+                      labelText: 'Hourly Rate',
+                      prefixIcon: Icon(Icons.attach_money),
+                    ),
+                    keyboardType: TextInputType.number,
                   ),
-                  keyboardType: TextInputType.number,
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    _submitProposal(context);
-                  },
-                  child: Text('Submit'),
-                ),
-              ],
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      _submitProposal(context);
+                    },
+                    child: Text('Submit'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
