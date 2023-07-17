@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/customer/customerhomepage.dart';
 import 'package:madadgarhath/screens/customer/customerlogin.dart';
 import 'package:madadgarhath/screens/customer/postjob.dart';
+import 'package:madadgarhath/screens/customer/yourorders.dart';
 
 class CustomerProfileScreen extends StatefulWidget {
   final String userId;
@@ -82,14 +83,22 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         color: const Color.fromARGB(255, 1, 31, 56),
         height: 65,
         backgroundColor: Colors.transparent,
-        index: 2,
+        index: 3,
         items: <Widget>[
           Icon(Icons.search, color: Colors.white, size: 30),
           Icon(Icons.assignment_add, color: Colors.white, size: 30),
+          Icon(Icons.shopping_cart, color: Colors.white, size: 30),
           Icon(Icons.settings, color: Colors.white, size: 30),
         ],
         onTap: (index) {
-          if (index == 0) {
+          if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => YourOrderScreen(userId: widget.userId),
+              ),
+            );
+          } else if (index == 0) {
             Navigator.push(
               context,
               MaterialPageRoute(

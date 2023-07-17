@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/customer/customerprofile.dart';
 import 'package:madadgarhath/screens/customer/postjob.dart';
+import 'package:madadgarhath/screens/customer/yourorders.dart';
 
 import 'available workers.dart';
 
@@ -74,6 +75,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           items: <Widget>[
             Icon(Icons.search, color: Colors.white, size: 30),
             Icon(Icons.assignment_add, color: Colors.white, size: 30),
+            Icon(Icons.shopping_cart, color: Colors.white, size: 30),
             Icon(Icons.settings, color: Colors.white, size: 30),
           ],
           onTap: (index) {
@@ -85,6 +87,13 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                 ),
               );
             } else if (index == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => YourOrderScreen(userId: widget.userId),
+                ),
+              );
+            } else if (index == 3) {
               Navigator.push(
                 context,
                 MaterialPageRoute(

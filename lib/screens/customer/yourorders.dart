@@ -1,5 +1,9 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:madadgarhath/screens/customer/customerhomepage.dart';
+import 'package:madadgarhath/screens/customer/customerprofile.dart';
+import 'package:madadgarhath/screens/customer/postjob.dart';
 
 class YourOrderScreen extends StatelessWidget {
   final String userId;
@@ -29,6 +33,42 @@ class YourOrderScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        color: const Color.fromARGB(255, 1, 31, 56),
+        height: 65,
+        backgroundColor: Colors.transparent,
+        index: 2,
+        items: <Widget>[
+          Icon(Icons.search, color: Colors.white, size: 30),
+          Icon(Icons.assignment_add, color: Colors.white, size: 30),
+          Icon(Icons.shopping_cart, color: Colors.white, size: 30),
+          Icon(Icons.settings, color: Colors.white, size: 30),
+        ],
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PostJobScreen(userId: userId),
+              ),
+            );
+          } else if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CustomerHomePage(userId: userId),
+              ),
+            );
+          } else if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CustomerProfileScreen(userId: userId),
+              ),
+            );
+          }
+        },
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance

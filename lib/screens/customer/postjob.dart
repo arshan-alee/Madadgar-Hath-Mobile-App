@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/customer/customerhomepage.dart';
 import 'package:madadgarhath/screens/customer/customerprofile.dart';
+import 'package:madadgarhath/screens/customer/yourorders.dart';
 
 class PostJobScreen extends StatefulWidget {
   final String userId;
@@ -86,17 +87,25 @@ class _PostJobScreenState extends State<PostJobScreen> {
         items: <Widget>[
           Icon(Icons.search, color: Colors.white, size: 30),
           Icon(Icons.assignment_add, color: Colors.white, size: 30),
+          Icon(Icons.shopping_cart, color: Colors.white, size: 30),
           Icon(Icons.settings, color: Colors.white, size: 30),
         ],
         onTap: (index) {
-          if (index == 0) {
+          if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => YourOrderScreen(userId: widget.userId),
+              ),
+            );
+          } else if (index == 0) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => CustomerHomePage(userId: widget.userId),
               ),
             );
-          } else if (index == 2) {
+          } else if (index == 3) {
             Navigator.push(
               context,
               MaterialPageRoute(
