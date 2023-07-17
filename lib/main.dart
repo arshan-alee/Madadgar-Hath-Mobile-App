@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/customer/customerhomepage.dart';
+import 'package:madadgarhath/screens/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        home: Splash());
+    return const MaterialApp(home: Splash());
   }
 }

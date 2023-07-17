@@ -40,6 +40,12 @@ dependencies:
   cloud_firestore:
   firebase_core:
   flutter_paypal:
+  flutter_launcher_icons:
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "images/logo2.png"
 
 dev_dependencies:
   flutter_test:
