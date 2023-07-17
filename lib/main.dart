@@ -14,8 +14,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        home: CustomerHomePage(
-      userId: 'tyfWcz5JHaTp3oroUjMwtSLPwHO2',
-    ));
+        home: Splash());
   }
 }
