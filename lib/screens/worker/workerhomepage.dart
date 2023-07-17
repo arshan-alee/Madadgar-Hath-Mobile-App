@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/workerprofile.dart';
-
+import 'package:madadgarhath/screens/worker/workerprofile.dart';
 import 'jobdetailscreen.dart';
 
 class WorkerHomePage extends StatefulWidget {
@@ -17,6 +16,7 @@ class WorkerHomePage extends StatefulWidget {
 class _WorkerHomePageState extends State<WorkerHomePage> {
   String _workerName = '';
   String _profession = '';
+  bool _availability = false;
   late Stream<List<DocumentSnapshot>> _availableJobsStream;
 
   final Map<String, String> _professionIcons = {
@@ -50,6 +50,7 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
     setState(() {
       _workerName = snapshot.docs.first.get('fullName') ?? '';
       _profession = snapshot.docs.first.get('profession') ?? '';
+      _availability = snapshot.docs.first.get('availability') ?? false;
     });
   }
 
@@ -183,7 +184,8 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
                                     MaterialPageRoute(
                                       builder: (context) => JobDetailsScreen(
                                           jobData: jobData,
-                                          workerProfession: _profession),
+                                          workerProfession: _profession,
+                                          workerAvailability: _availability),
                                     ),
                                   );
                                 },
@@ -199,12 +201,12 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(height: 4),
+                                        SizedBox(height: 6),
+                                        Text('Job Hours: $jobHours'),
+                                        SizedBox(height: 2),
                                         Text('Address: $customerAddress'),
                                         SizedBox(height: 2),
                                         Text('Provider: $customerFullName'),
-                                        SizedBox(height: 2),
-                                        Text('Phone: $customerPhoneNumber'),
                                       ],
                                     ),
                                   ),

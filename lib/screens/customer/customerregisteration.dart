@@ -1,46 +1,30 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/workerhomepage.dart';
-import 'package:madadgarhath/screens/workerlogin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:madadgarhath/screens/customer/customerhomepage.dart';
+import 'package:madadgarhath/screens/customer/customerlogin.dart';
 
-class WorkerRegisterForm extends StatefulWidget {
-  const WorkerRegisterForm({Key? key}) : super(key: key);
+class CustomerRegisterForm extends StatefulWidget {
+  const CustomerRegisterForm({Key? key}) : super(key: key);
 
   @override
-  _WorkerRegisterFormState createState() => _WorkerRegisterFormState();
+  _CustomerRegisterFormState createState() => _CustomerRegisterFormState();
 }
 
-class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
+class _CustomerRegisterFormState extends State<CustomerRegisterForm> {
   final _formKey = GlobalKey<FormState>();
 
-  String _wfullName = '';
-  String _wemail = '';
-  String _wpassword = '';
-  String _wphoneNumber = '';
-  String _wprofession = '';
-  int _wcnic = 0;
-  double _whourlyRate = 0.0;
-  bool _isAvailable = false;
-  String _wdescription = '';
-
-  final List<String> _professionOptions = [
-    'Maid',
-    'Driver',
-    'Plumber',
-    'Electrician',
-    'Mechanic',
-    'Chef',
-    'Babysitter',
-    'Attendant',
-    'Tutor',
-    'Painter',
-    'Gardener',
-    'Sewerage Cleaner'
-  ];
+  String _cfullName = '';
+  String _cemail = '';
+  String _cpassword = '';
+  String _cphoneNumber = '';
+  String _caddress = '';
+  bool _cjobAvailability = false;
+  String _cneedprofession = '';
+  String _cjobDescription = '';
+  int _ccnic = 0;
+  double _cjobHours = 0.0;
+  bool _isJobPosted = false;
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -54,7 +38,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
         // Check if the CNIC exists in the 'national record' collection
         final nationalRecordQuery = await firestore
             .collection('national record')
-            .where('cnic', isEqualTo: _wcnic)
+            .where('cnic', isEqualTo: _ccnic)
             .get();
 
         if (nationalRecordQuery.docs.isNotEmpty) {
@@ -63,7 +47,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
           // Check if the CNIC exists in the 'criminal record' collection
           final criminalRecordQuery = await firestore
               .collection('criminal record')
-              .where('cnic', isEqualTo: _wcnic)
+              .where('cnic', isEqualTo: _ccnic)
               .get();
 
           if (criminalRecordQuery.docs.isNotEmpty) {
@@ -77,36 +61,41 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
 
           // Create the user with email and password
           final userCredential = await auth.createUserWithEmailAndPassword(
-            email: _wemail,
-            password: _wpassword,
+            email: _cemail,
+            password: _cpassword,
           );
 
           // Retrieve the user ID
           final userId = userCredential.user!.uid;
 
-          // Create a document reference for the worker registration data
-          final docRef = await firestore.collection('worker').add({
+          // Create a document reference for the customer registration data
+          final docRef = await firestore.collection('customer').add({
             'userId': userId,
-            'fullName': _wfullName,
-            'email': _wemail,
-            'password': _wpassword,
-            'phoneNumber': _wphoneNumber,
-            'profession': _wprofession,
-            'cnic': _wcnic,
-            'hourlyRate': _whourlyRate,
-            'availability': _isAvailable,
-            'description': _wdescription
+            'fullName': _cfullName,
+            'email': _cemail,
+            'password': _cpassword,
+            'phoneNumber': _cphoneNumber,
+            'address': _caddress,
+            'cnic': _ccnic,
+            'jobAvailability': _cjobAvailability,
+            'needProfession': _cneedprofession,
+            'jobDescription': _cjobDescription,
+            'jobHours': _cjobHours,
+            'jobPosted': _isJobPosted
           });
+
+          // Retrieve the newly created document ID
+          final documentId = docRef.id;
 
           // Display a success message
           _showRegistrationSuccessSnackBar();
 
           // Delay navigation to the homepage
-          Future.delayed(const Duration(seconds: 5), () {
-            Navigator.push(
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => WorkerHomePage(userId: userId),
+                builder: (context) => CustomerHomePage(userId: userId),
               ),
             );
           });
@@ -165,14 +154,6 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
     );
   }
 
-  Future<Map<String, dynamic>> _fetchWorkerData(String workerId) async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('worker')
-        .doc(workerId)
-        .get();
-    return snapshot.data() as Map<String, dynamic>;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,7 +195,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Worker Registration',
+                            'Customer Registration',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -233,7 +214,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wfullName = value;
+                              _cfullName = value;
                             },
                           ),
                           TextFormField(
@@ -249,7 +230,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wemail = value;
+                              _cemail = value;
                             },
                           ),
                           TextFormField(
@@ -266,7 +247,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wpassword = value;
+                              _cpassword = value;
                             },
                           ),
                           TextFormField(
@@ -282,7 +263,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wcnic = int.parse(value);
+                              _ccnic = int.parse(value);
                             },
                           ),
                           TextFormField(
@@ -299,30 +280,22 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                               return null;
                             },
                             onChanged: (value) {
-                              _wphoneNumber = value;
+                              _cphoneNumber = value;
                             },
                           ),
-                          DropdownButtonFormField<String>(
+                          TextFormField(
                             decoration: InputDecoration(
-                              labelText: 'Profession',
-                              prefixIcon: Icon(Icons.work),
+                              labelText: 'Address',
+                              prefixIcon: Icon(Icons.location_on),
                             ),
-                            items: _professionOptions.map((String profession) {
-                              return DropdownMenuItem<String>(
-                                value: profession,
-                                child: Text(profession),
-                              );
-                            }).toList(),
                             validator: (value) {
-                              if (value == null) {
-                                return 'Please select a profession';
+                              if (value!.isEmpty) {
+                                return 'Please enter your address';
                               }
                               return null;
                             },
                             onChanged: (value) {
-                              setState(() {
-                                _wprofession = value!;
-                              });
+                              _caddress = value;
                             },
                           ),
                           SizedBox(height: 20),
@@ -347,7 +320,7 @@ class _WorkerRegisterFormState extends State<WorkerRegisterForm> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WorkerLoginForm(),
+                                      builder: (context) => CustomerLoginForm(),
                                     ),
                                   );
                                 },

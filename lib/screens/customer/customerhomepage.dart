@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/customerprofile.dart';
-import 'package:madadgarhath/screens/postjob.dart';
+import 'package:madadgarhath/screens/customer/customerprofile.dart';
+import 'package:madadgarhath/screens/customer/postjob.dart';
 
 import 'available workers.dart';
 

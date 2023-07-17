@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/customerlogin.dart';
-import 'package:madadgarhath/screens/workerlogin.dart';
-import 'package:madadgarhath/screens/workerregisteration.dart';
+import 'package:madadgarhath/screens/customer/customerlogin.dart';
+import 'package:madadgarhath/screens/worker/workerlogin.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({super.key});

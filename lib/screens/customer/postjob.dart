@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/customerprofile.dart';
-import 'package:madadgarhath/screens/workerprofile.dart';
-import 'customerhomepage.dart';
+import 'package:madadgarhath/screens/customer/customerhomepage.dart';
+import 'package:madadgarhath/screens/customer/customerprofile.dart';
 
 class PostJobScreen extends StatefulWidget {
   final String userId;

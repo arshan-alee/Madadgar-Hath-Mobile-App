@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/hireworker.dart';
+import 'package:madadgarhath/screens/customer/hireworker.dart';
 
 class AvailableWorkersPage extends StatelessWidget {
   final String profession;

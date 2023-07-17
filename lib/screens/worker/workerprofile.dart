@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/workerhomepage.dart';
-import 'package:madadgarhath/screens/workerlogin.dart';
+import 'package:madadgarhath/screens/worker/workerhomepage.dart';
+import 'package:madadgarhath/screens/worker/workerlogin.dart';
 
 class WorkerProfileScreen extends StatefulWidget {
   final String userId;

@@ -1,50 +1,41 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:madadgarhath/screens/WorkerRegisteration.dart';
-import 'package:madadgarhath/screens/customerhomepage.dart';
-import 'package:madadgarhath/screens/getstarted.dart';
-import 'package:madadgarhath/screens/workerhomepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:madadgarhath/screens/customer/customerhomepage.dart';
+import 'package:madadgarhath/screens/customer/customerregisteration.dart';
+import 'package:madadgarhath/screens/getstarted.dart';
 
-import '../widgets/CustomSignInButton.dart';
-
-class WorkerLoginForm extends StatefulWidget {
-  const WorkerLoginForm({Key? key}) : super(key: key);
+class CustomerLoginForm extends StatefulWidget {
+  const CustomerLoginForm({Key? key}) : super(key: key);
 
   @override
-  _WorkerLoginFormState createState() => _WorkerLoginFormState();
+  _CustomerLoginFormState createState() => _CustomerLoginFormState();
 }
 
-class _WorkerLoginFormState extends State<WorkerLoginForm> {
+class _CustomerLoginFormState extends State<CustomerLoginForm> {
   final _formKey = GlobalKey<FormState>();
 
-  String _wemail = '';
-  String _wpassword = '';
+  String _cemail = '';
+  String _cpassword = '';
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Form is valid, perform sign-in logic here
-      // You can access the entered values using the _wemail and _wpassword variables
-      // Add your sign-in logic here
       try {
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _wemail,
-          password: _wpassword,
+          email: _cemail,
+          password: _cpassword,
         );
         final userId = userCredential.user!.uid;
-        // Login successful
         _showLoginSuccessSnackBar();
         Future.delayed(Duration(seconds: 5), () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => WorkerHomePage(userId: userId)),
+              builder: (context) => CustomerHomePage(userId: userId),
+            ),
           );
         });
       } catch (e) {
-        // Login failed
         _showLoginFailureSnackBar();
       }
     }
@@ -95,7 +86,7 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
             );
           },
         ),
-        elevation: 0, // Remove the app bar shadow
+        elevation: 0,
       ),
       body: Stack(
         children: [
@@ -119,7 +110,7 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Worker Sign In',
+                          'Customer Sign In',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -135,11 +126,10 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                             if (value!.isEmpty) {
                               return 'Please enter an email address';
                             }
-                            // Add email validation logic here if needed
                             return null;
                           },
                           onChanged: (value) {
-                            _wemail = value;
+                            _cemail = value;
                           },
                         ),
                         TextFormField(
@@ -152,11 +142,10 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                             if (value!.isEmpty) {
                               return 'Please enter a password';
                             }
-                            // Add password validation logic here if needed
                             return null;
                           },
                           onChanged: (value) {
-                            _wpassword = value;
+                            _cpassword = value;
                           },
                         ),
                         SizedBox(height: 20),
@@ -171,44 +160,6 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                           ),
                           child: Text('Log In'),
                         ),
-                        // SizedBox(height: 10),
-                        // Text(
-                        //   'Or connect using',
-                        //   style: TextStyle(fontSize: 16, color: Colors.grey),
-                        // ),
-                        // SizedBox(height: 10),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     CustomButton(
-                        //       icon: 'images/google.png',
-                        //       text: "Log In with Google",
-                        //       bgcolor: Color(0xFFCE1010),
-                        //       txtcolor: Colors.white,
-                        //       onPressed: () {
-                        //         Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(
-                        //               builder: (context) => WorkerHomePage()),
-                        //         );
-                        //       },
-                        //     ),
-                        //     SizedBox(width: 20),
-                        //     CustomButton(
-                        //       icon: 'images/facebook.png',
-                        //       text: "Log In with Facebook",
-                        //       bgcolor: Colors.blue,
-                        //       txtcolor: Colors.white,
-                        //       onPressed: () {
-                        //         Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(
-                        //               builder: (context) => WorkerHomePage()),
-                        //         );
-                        //       },
-                        //     ),
-                        //   ],
-                        // ),
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -219,8 +170,9 @@ class _WorkerLoginFormState extends State<WorkerLoginForm> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          WorkerRegisterForm()),
+                                    builder: (context) =>
+                                        CustomerRegisterForm(),
+                                  ),
                                 );
                               },
                               child: Text('Register Now'),
