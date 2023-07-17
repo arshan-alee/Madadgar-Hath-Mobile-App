@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/worker/workerprofile.dart';
+import 'package:madadgarhath/screens/worker/yourproposals.dart';
 import 'jobdetailscreen.dart';
 
 class WorkerHomePage extends StatefulWidget {
@@ -17,6 +18,10 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
   String _workerName = '';
   String _profession = '';
   bool _availability = false;
+  String _workerphoneNumber = '';
+  double _workerhourlyRate = 0.0;
+  String _workeremail = '';
+  String _workerdescription = '';
   late Stream<List<DocumentSnapshot>> _availableJobsStream;
 
   final Map<String, String> _professionIcons = {
@@ -50,6 +55,10 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
     setState(() {
       _workerName = snapshot.docs.first.get('fullName') ?? '';
       _profession = snapshot.docs.first.get('profession') ?? '';
+      _workerphoneNumber = snapshot.docs.first.get('phoneNumber') ?? '';
+      _workeremail = snapshot.docs.first.get('email') ?? '';
+      _workerhourlyRate = snapshot.docs.first.get('hourlyRate') ?? 0.0;
+      _workerdescription = snapshot.docs.first.get('description') ?? '';
       _availability = snapshot.docs.first.get('availability') ?? false;
     });
   }
@@ -99,15 +108,25 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
           backgroundColor: Colors.transparent,
           items: <Widget>[
             Icon(Icons.search, color: Colors.white, size: 30),
+            Icon(Icons.assignment, color: Colors.white, size: 30),
             Icon(Icons.settings, color: Colors.white, size: 30),
           ],
           onTap: (index) {
-            if (index == 1) {
+            if (index == 2) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
                       WorkerProfileScreen(userId: widget.userId),
+                ),
+              );
+            }
+            if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      YourProposalScreen(userId: widget.userId),
                 ),
               );
             }
@@ -183,9 +202,15 @@ class _WorkerHomePageState extends State<WorkerHomePage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => JobDetailsScreen(
+                                          workerId: widget.userId,
                                           jobData: jobData,
                                           workerProfession: _profession,
-                                          workerAvailability: _availability),
+                                          workerAvailability: _availability,
+                                          workerPhoneNumber: _workerphoneNumber,
+                                          workerEmail: _workeremail,
+                                          workerHourlyRate: _workerhourlyRate,
+                                          workerDescription: _workerdescription,
+                                          workerName: _workerName),
                                     ),
                                   );
                                 },

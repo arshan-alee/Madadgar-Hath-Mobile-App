@@ -5,12 +5,23 @@ class JobDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> jobData;
   final String workerProfession;
   final bool workerAvailability;
-
+  final String workerPhoneNumber;
+  final String workerEmail;
+  final double workerHourlyRate;
+  final String workerDescription;
+  final String workerId;
+  final String workerName;
   const JobDetailsScreen({
     Key? key,
     required this.jobData,
     required this.workerProfession,
     required this.workerAvailability,
+    required this.workerPhoneNumber,
+    required this.workerEmail,
+    required this.workerHourlyRate,
+    required this.workerDescription,
+    required this.workerId,
+    required this.workerName,
   }) : super(key: key);
 
   @override
@@ -101,40 +112,43 @@ class JobDetailsScreen extends StatelessWidget {
 
   void _navigateToSubmitProposal(BuildContext context) {
     final needProfession = jobData['needProfession'] as String;
-
-    if (!workerAvailability) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Cannot Apply'),
-            content: Text(
-              'You cannot apply for this job as you are unavailable at the moment.',
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
     if (workerProfession == needProfession) {
-      // Worker's profession matches the required profession
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SubmitProposalScreen(jobData: jobData),
-        ),
-      );
+      if (workerAvailability) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SubmitProposalScreen(
+                jobData: jobData,
+                workerPhoneNumber: workerPhoneNumber,
+                workerEmail: workerEmail,
+                workerHourlyRate: workerHourlyRate,
+                workerDescription: workerDescription,
+                workerId: workerId,
+                workerName: workerName),
+          ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Cannot Apply'),
+              content: Text(
+                'You cannot apply for this job as you are unavailable at the moment.',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     } else {
-      // Worker's profession doesn't match the required profession
       showDialog(
         context: context,
         builder: (BuildContext context) {

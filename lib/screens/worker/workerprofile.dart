@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:madadgarhath/screens/worker/workerhomepage.dart';
 import 'package:madadgarhath/screens/worker/workerlogin.dart';
+import 'package:madadgarhath/screens/worker/yourproposals.dart';
 
 class WorkerProfileScreen extends StatefulWidget {
   final String userId;
@@ -94,9 +95,10 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
         color: const Color.fromARGB(255, 1, 31, 56),
         height: 65,
         backgroundColor: Colors.transparent,
-        index: 1,
+        index: 2,
         items: <Widget>[
           Icon(Icons.search, color: Colors.white, size: 30),
+          Icon(Icons.assignment, color: Colors.white, size: 30),
           Icon(Icons.settings, color: Colors.white, size: 30),
         ],
         onTap: (index) {
@@ -105,6 +107,14 @@ class _WorkerProfileScreenState extends State<WorkerProfileScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => WorkerHomePage(userId: widget.userId),
+              ),
+            );
+          }
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => YourProposalScreen(userId: widget.userId),
               ),
             );
           }
