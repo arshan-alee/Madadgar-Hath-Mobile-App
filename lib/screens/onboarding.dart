@@ -82,7 +82,7 @@ class _OnBoardingState extends State<OnBoarding> {
                           child: Align(
                             alignment: Alignment.center,
                             child: Container(
-                              height: 100,
+                              height: MediaQuery.of(context).size.height * 0.06,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -129,8 +129,8 @@ class _OnBoardingState extends State<OnBoarding> {
                                 : Spacer(),
                             Spacer(),
                             Container(
-                              height: 60,
-                              width: 60,
+                              height: MediaQuery.of(context).size.width * 0.15,
+                              width: MediaQuery.of(context).size.width * 0.15,
                               child: ElevatedButton(
                                 onPressed: () {
                                   _pageIndex == onboard_data.length - 1
@@ -194,41 +194,49 @@ class DotIndicator extends StatelessWidget {
 }
 
 class OnboardContent extends StatelessWidget {
+  final String title, image, description;
   const OnboardContent({
     super.key,
     required this.title,
     required this.image,
     required this.description,
   });
-  final String title, image, description;
+
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Spacer(),
-      Text(title,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 26,
-              fontFamily: 'Manrope-ExtraBold',
-              color: const Color.fromARGB(255, 1, 31, 56))),
-      SizedBox(
-        height: 10,
+    return SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height, // Set a fixed height
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 26,
+                fontFamily: 'Manrope-ExtraBold',
+                color: const Color.fromARGB(255, 1, 31, 56),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            Image.asset(
+              image,
+              height: MediaQuery.of(context).size.height * 0.4,
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: Color.fromARGB(255, 3, 67, 119)),
+            ),
+          ],
+        ),
       ),
-      Image.asset(
-        image,
-        height: 300,
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Text(description,
-          textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: Color.fromARGB(255, 3, 67, 119))),
-      Spacer()
-    ]);
+    );
   }
 }
 
